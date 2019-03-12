@@ -15,7 +15,7 @@ module.exports = {
             .set('pages',resolve('src/pages'))
             .set('plugins',resolve('src/plugins'))
     },
-    assetsDir:`./`,
+    publicPath:`./`,
     devServer: {
         port:8088,
         /*proxy: {
