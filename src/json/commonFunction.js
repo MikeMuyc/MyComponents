@@ -2,25 +2,6 @@ import axios from "@axios";
 import { Message } from 'element-ui'
 const MyPlugin = {};
 
-const authoxCheck = async function(op) {
-    let pro = new Promise((resolve, reject) => {
-        let params = {};
-        params['resource'] = `authox`;
-        params['op'] = op;
-        axios.get("/rest/authox/check", params).then(res => {
-            if (res.data.allowed) {
-                resolve();
-            } else {
-                reject();
-            }
-        }).catch(err => {
-            // 暂时不考虑网络问题，如果因为网络丢包显示不正常，应当刷新页面
-            reject();
-        });
-    });
-    return pro
-};
-
 MyPlugin.install = function (Vue) {
     //时间戳转换成 年-月-日
     Vue.prototype.changeDate = function (timeStamp) {
@@ -105,38 +86,7 @@ MyPlugin.install = function (Vue) {
             return new Date(date).getTime();
         }
     }
-    //填空题-题目转换
-    Vue.prototype.completionStringfor = function (str) {
-        return str.replace(/##/g,`_____`);
-    }
-    //填空题-答案转换
-    Vue.prototype.completionanswerful = function (str) {
-        let newstr = '';
-        if(str){
-            let arr = str.split(`!#!`);
 
-            for(let i=0;i<arr.length;i++){
-                newstr += `第${i+1}项：${arr[i]}。`
-            }
-        }
-        return newstr;
-    }
-
-    Vue.directive('authox', {
-        bind: (el, binding, vnode, oldVnode) => {
-            let className = el.getAttribute("class");
-            if(className){
-                el.setAttribute("class", className + ` authoxHidden`);
-            }
-            else{
-                el.setAttribute("class", `authoxHidden`);
-            }
-            authoxCheck(binding.value).then(() => {
-                className = className.replace("hidden", "");
-                el.setAttribute("class", className);
-            }).catch(() => {});
-        }
-    })
 
     Vue.directive('clickoutside', {
         bind:function(el,binding,vnode){
@@ -160,37 +110,6 @@ MyPlugin.install = function (Vue) {
 }
 
 export default MyPlugin
-export function httpTips(type, code, dataLength) {
-    if (type === 'post') {
-        if (code === 200) {
-            Message({
-                showClose: true,
-                message: `提交成功！`,
-                type: 'success'
-            })
-        } else {
-            Message({
-                showClose: true,
-                message: `提交失败！`,
-                type: 'error'
-            })
-        }
-    } else {
-        if (code !== 200) {
-            Message({
-                showClose: true,
-                message: `获取数据失败！`,
-                type: 'error'
-            })
-        } else if(!dataLength) {
-            Message({
-                showClose: true,
-                message: `查无数据`,
-                type: 'error'
-            })
-        }
-    }
 
-}
 
 

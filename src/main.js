@@ -16,8 +16,7 @@ import iView from 'iview';
 Vue.use(iView);
 
 //全局变量和全局方法
-import global from 'json/global';
-Vue.prototype.global = global;
+
 import alljs from 'json/commonFunction';
 Vue.use(alljs);
 
@@ -29,27 +28,27 @@ import axios from 'axios';
 Vue.prototype.$http = axios;
 
 router.beforeEach((to, from, next) => {
-    iView.LoadingBar.start();
-    next();
+  iView.LoadingBar.start();
+  next();
 });
 
 router.afterEach(route => {
-    iView.LoadingBar.finish();
+  iView.LoadingBar.finish();
 });
 
 
 
 if (process.env.NODE_ENV === 'development') {
-    //开发环境 do something
-    axios.defaults.baseURL = "./api";
+  //开发环境 do something
+  axios.defaults.baseURL = "./api";
 } else {
-    //生产环境 do something
+  //生产环境 do something
 }
 
 
 new Vue({
-    router,
-    store,
-    render: h => h(App)
+  router,
+  store,
+  render: h => h(App)
 }).$mount('#app');
 

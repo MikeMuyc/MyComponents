@@ -39,6 +39,7 @@
             let _this = this;
             bus.$on(`tsObj`,function(data){
                 _this.labelName = data.name;
+                _this.showflag = false;
             });
         },
         methods: {
