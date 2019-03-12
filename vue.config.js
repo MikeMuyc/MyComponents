@@ -15,12 +15,7 @@ module.exports = {
             .set('pages',resolve('src/pages'))
             .set('plugins',resolve('src/plugins'))
     },
-    /*pages: {
-        index: {
-            entry: "src/main.js",
-            template: "index.html"
-        }
-    },*/
+    assetsDir:`./`,
     devServer: {
         port:8088,
         /*proxy: {
