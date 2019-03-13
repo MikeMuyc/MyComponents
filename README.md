@@ -15,7 +15,3 @@ npm run serve
 npm run build
 ```
 
-### 无限级下拉菜单组件（src/components/mixSelect + tSelect）
-```
-
-```
