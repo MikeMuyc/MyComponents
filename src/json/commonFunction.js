@@ -1,4 +1,5 @@
 
+import { Message } from 'element-ui'
 const MyPlugin = {};
 
 MyPlugin.install = function (Vue) {
@@ -50,6 +51,7 @@ MyPlugin.install = function (Vue) {
         }
         else{
             this[name] = '';
+            //需要用到element-UI组件
             this.$message({
                 showClose: true,
                 message: '请重新填写！',
@@ -67,6 +69,7 @@ MyPlugin.install = function (Vue) {
         }
         else{
             this[name] = '';
+            //需要用到element-UI组件
             this.$message({
                 showClose: true,
                 message: '请重新填写！',

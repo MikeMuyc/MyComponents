@@ -5,12 +5,12 @@ export default [
         redirect:'',
     },
     {
-        name:"学习资料",
-        path:'learningMaterials',
+        name:"学习",
+        path:'learning',
         redirect:'',
     },
     {
-        name:"互动问答",
+        name:"题库",
         path:'questionBank',
         redirect:'',
     },
@@ -25,7 +25,7 @@ export default [
         redirect:'',
     },
     {
-        name:"组织架构",
+        name:"人员管理",
         path:'personnelManagement',
         redirect:'',
     },
