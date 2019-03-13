@@ -17,7 +17,7 @@ module.exports = {
     },
     publicPath:`./`,
     devServer: {
-        port:8088,
+        port:8096,
         /*proxy: {
             "/api": {
                 target: "http://localhost:8666/",     // 访问数据的计算机域名

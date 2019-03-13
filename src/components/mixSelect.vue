@@ -1,12 +1,12 @@
 <template>
     <div class="mixSelect">
         <div class="singleBOX" v-clickoutside="handleClose" :class="{active:showflag}">
-            <span class="valuebox" @click="showflag = !showflag" :title="labelName">
-                <em :class="{active:labelName!==`请选择`}">{{labelName}}</em>
+            <span class="valuebox" @click="showflag = !showflag" :title="labelText">
+                <em :class="{active:labelText!==`请选择`}">{{labelText}}</em>
                 <i class="iconfont icon-daosanjiao svgse" :class="{active:showflag}"></i>
             </span>
             <transition name="slfade">
-                <tSelect v-if="showflag" :arr="list"></tSelect>
+                <tSelect v-if="showflag" :arr="list" :labelName="labelName" :valueName="valueName" :childrenName="childrenName"></tSelect>
                 <!--组件递归调用实现无限级展开菜单，需要eventBus.js事件总线做参数中转，传递选中项的name和value。-->
             </transition>
         </div>
@@ -21,11 +21,11 @@
         components: {
             tSelect
         },
-        props:[`selectList`],
+        props:[`selectList`,`labelName`,`valueName`,`childrenName`],
         data() {
             return {
                 showflag:false,
-                labelName:`请选择`,
+                labelText:`请选择`,
                 list:[],
             }
         },
@@ -38,7 +38,8 @@
             }
             let _this = this;
             bus.$on(`tsObj`,function(data){
-                _this.labelName = data.name;
+                _this.labelText = data.name;
+                _this.$emit(`sentTo`,data.val);
                 _this.showflag = false;
             });
         },
@@ -108,7 +109,7 @@
         left: 0;
         min-width: 100%;
     }
-    /*进入离开过渡动画*/
+    /*过渡动画*/
     .slfade-enter-active {
         transition: all .3s;
         transform-origin: center top 0;

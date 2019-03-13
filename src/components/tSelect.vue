@@ -1,9 +1,9 @@
 <template>
     <div class="tSelect" ref="tSelect">
         <div class="tLine" v-for="(item,index) in arr" >
-            <div class="tLabel" @mouseenter="hoverIndex = index" @click="sentVal(item.val,item.name)">{{item.name}}</div>
+            <div class="tLabel" @mouseenter="hoverIndex = index" @click="sentVal(item[valueName],item[labelName])">{{item[labelName]}}</div>
             <transition name="tfade">
-                <tSelect v-if="item.children && hoverIndex === index" v-show="hoverIndex === index" :arr="item.children" :style="{left:leftVal}"></tSelect>
+                <tSelect v-if="item[childrenName] && hoverIndex === index" v-show="hoverIndex === index" :arr="item[childrenName]" :style="{left:leftVal}" :labelName="labelName" :valueName="valueName" :childrenName="childrenName"></tSelect>
             </transition>
 
         </div>
@@ -15,7 +15,7 @@
     import bus from './eventBus'
     export default {
         name: "tSelect",
-        props:[`arr`],
+        props:[`arr`,`labelName`,`valueName`,`childrenName`],
         data() {
             return {
                 hoverIndex:-1,
@@ -25,11 +25,13 @@
         mounted(){
             this.$nextTick(() => {
                 this.leftVal = this.$refs.tSelect.clientWidth + 5 + `px`
-            })
+            });
         },
         methods: {
             sentVal(val,name){
-                bus.$emit(`tsObj`,{val:val,name:name})
+                if(val){
+                    bus.$emit(`tsObj`,{val:val,name:name})
+                }
             },
         },
     }

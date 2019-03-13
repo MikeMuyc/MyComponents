@@ -10,7 +10,6 @@ import 'style/main.scss'
 //element组件
 import ElementUI from 'element-ui';
 Vue.use(ElementUI);
-Vue.config.productionTip = false;
 //iView组件
 import iView from 'iview';
 Vue.use(iView);

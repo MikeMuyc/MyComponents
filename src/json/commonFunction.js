@@ -1,5 +1,4 @@
-import axios from "@axios";
-import { Message } from 'element-ui'
+
 const MyPlugin = {};
 
 MyPlugin.install = function (Vue) {
@@ -18,7 +17,7 @@ MyPlugin.install = function (Vue) {
         else{
             return '-'
         }
-    }
+    };
     //时间戳转换成 年-月-日 时：分：秒
     Vue.prototype.changeTime = function (timeStamp){
         if(timeStamp){
@@ -40,7 +39,7 @@ MyPlugin.install = function (Vue) {
         else{
             return '-'
         }
-    }
+    };
     //限制输入值为浮点数
     Vue.prototype.floatful = function (num,name){
         if(parseFloat(num)>=0){
@@ -57,7 +56,7 @@ MyPlugin.install = function (Vue) {
                 type: 'error'
             });
         }
-    }
+    };
     //限制输入值为整数
     Vue.prototype.intful = function (num,name){
         if(parseInt(num)>=0){
@@ -74,7 +73,7 @@ MyPlugin.install = function (Vue) {
                 type: 'error'
             });
         }
-    }
+    };
     //日期字符串转换时间戳
     /**
      * @return {number}
@@ -85,9 +84,9 @@ MyPlugin.install = function (Vue) {
             date = date.replace(/-/g,'/');
             return new Date(date).getTime();
         }
-    }
+    };
 
-
+    //自定义指令，点击空白处触发事件
     Vue.directive('clickoutside', {
         bind:function(el,binding,vnode){
             function documentHandler(e){
@@ -105,9 +104,9 @@ MyPlugin.install = function (Vue) {
             document.removeEventListener('click',el._vueClickOutside_);
             delete el._vueClickOutside_;
         }
-    })
+    });
 
-}
+};
 
 export default MyPlugin
 

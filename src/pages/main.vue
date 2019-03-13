@@ -2,9 +2,7 @@
     <div id="Mybody">
         <div id="header">
             <div class="headCenter">
-                <div class="left">
-
-                </div>
+                <div class="left"></div>
 
                 <div class="nav">
                     <div @click="navRouteTo(item.redirect)" v-for="item in navlist" class="itemli">
@@ -15,19 +13,11 @@
                 </div>
 
                 <div class="right">
-                    <el-badge :value="0" :max="99" class="item">
-                        <i class="iconfont icon-xiaoxi"></i>
-                    </el-badge>
+                    <i class="iconfont icon-xiaoxi"></i>
 
-                    <el-badge :value="0" :max="99" class="item">
-                        <i class="iconfont icon-tongzhi" ></i>
-                    </el-badge>
-                    <div class="photo">照片</div>
+                    <i class="iconfont icon-tongzhi" ></i>
                 </div>
-
-
             </div>
-
         </div>
         <vue-perfect-scrollbar :style="{height:bodyHeight + `px`}" ref="pfScroll" id="_scroll" :isBodyScroll="true">
 
@@ -39,10 +29,7 @@
 </template>
 
 <script>
-
     import navlist from 'json/admin'
-
-
     export default {
         name: "Mybody",
         components: {
@@ -56,15 +43,12 @@
             }
         },
         watch: {
-            /*$route() {
-                this.getBaseData();
-            },*/
+
         },
         mounted() {
 
         },
         computed: {
-
             hoverIndex() {
                 let path = this.$route.path;
                 if (path.indexOf(`mainIndex`) > -1) {
@@ -79,7 +63,6 @@
             }
         },
         methods: {
-
             navfor(path) {
                 return this.$route.fullPath.indexOf(path) > -1
             },
@@ -151,7 +134,6 @@
             background-color: rgba(255, 255, 255, 0.2);
             border-bottom: 3px solid #354ef2;
             transition: .3s;
-
             &.mainIndex {
                 left: 0
             }
@@ -188,21 +170,17 @@
         color: #fff;
     }
 
-    .headCenter .right .item {
-        margin-right: 20px;
-        margin-top: 6px;
-        height: 30px;
-        display: flex;
-        align-items: flex-end;
-        cursor: pointer;
+    .headCenter .right {
         .iconfont {
+            margin-right: 20px;
+            margin-top: 6px;
+            cursor: pointer;
             font-size: 24px;
             width: 24px;
             height: 30px;
             line-height:  30px;
             color: #ffffff;
         }
-
     }
 
     .headCenter .right .photo {
