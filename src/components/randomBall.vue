@@ -15,6 +15,7 @@
                 ball:[`white`,`copper`,`white`,`gold`,`white`,`white`,`silver`,`white`,`white`,`copper`,`white`,`gold`,`white`,`white`,`silver`,`white`],
                 xleft:0,
                 setBall:``,
+                stopFlag:true,
                 fn1:null,
                 fn2:null,
             }
@@ -84,45 +85,46 @@
                 }
             },
             stopit(){
-                let t1 = this.xleft;
-                let num = -this.xleft/70 + 15;
-                num = parseInt(num);
+                if(this.stopFlag){
+                    this.stopFlag = false;
+                    let t1 = this.xleft;
+                    let num = -this.xleft/70 + 15;
+                    num = parseInt(num);
 
-                //设置抽中球的颜色，可从后台获取，然后直接覆盖
-                if(this.setBall){
-                    this.ball[num] = this.setBall;
-                }
-
-                if(this.fn1){
-                    let timer = 5;
-                    let nnn = 0;
-                    let ff2 = setInterval(()=>{
-                        //结束时的缓动效果
-                        if(timer < 20){
-                            if(nnn < 4){
-                                nnn++;
-                            }
-                            else{
-                                timer += 1;
-                            }
-                            clearInterval(this.fn2);
-                            this.fn2 = setInterval(()=>{
-                                this.xleft -= 2;
-                                //当点击结束时，缓动效果固定滚动13个球后清除计时事件
-                                let t2 = t1 - 13*70;
-                                let t3 = t1 - 12*70;
-                                if( this.xleft>=t2 && this.xleft<=t3 && this.xleft % 70 === 0){
-                                    clearInterval(this.fn2);
-                                    clearInterval(ff2);
-                                    clearInterval(this.fn1);
-                                    this.fn1 = null;
+                    //设置抽中球的颜色，可从后台获取，然后直接覆盖
+                    if(this.setBall){
+                        this.ball[num] = this.setBall;
+                    }
+                    if(this.fn1){
+                        let timer = 5;
+                        let nnn = 0;
+                        let ff2 = setInterval(()=>{
+                            //结束时的缓动效果
+                            if(timer < 20){
+                                if(nnn < 4){
+                                    nnn++;
                                 }
-                            },timer)
-                        }
-                    },200)
+                                else{
+                                    timer += 1;
+                                }
+                                clearInterval(this.fn2);
+                                this.fn2 = setInterval(()=>{
+                                    this.xleft -= 2;
+                                    //当点击结束时，缓动效果固定滚动13个球后清除计时事件
+                                    let t2 = t1 - 13*70;
+                                    let t3 = t1 - 12*70;
+                                    if( this.xleft>=t2 && this.xleft<=t3 && this.xleft % 70 === 0){
+                                        clearInterval(this.fn2);
+                                        clearInterval(ff2);
+                                        clearInterval(this.fn1);
+                                        this.fn1 = null;
+                                        this.stopFlag = true;
+                                    }
+                                },timer)
+                            }
+                        },200)
+                    }
                 }
-
-
             },
         },
     }
