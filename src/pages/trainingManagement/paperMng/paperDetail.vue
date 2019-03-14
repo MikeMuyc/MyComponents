@@ -33,7 +33,12 @@
                 </div>
             </vue-perfect-scrollbar>
         </div>
-        <div class="square"></div>
+        <div class="square">
+            <myBtn type="normal" text="下一个" :handleClick="aaa"></myBtn>
+            <myBtn type="confirm" text="确认"></myBtn>
+            <myBtn type="cancel" text="取消"></myBtn>
+            <p style="position: absolute;bottom:20px">Vue中的render函数，适用于相同组件的不同状态的css样式呈现。</p>
+        </div>
 
     </div>
 </template>
@@ -42,11 +47,13 @@
     import mixSelect from 'components/mixSelect'
     import testJson from 'json/testJson'
     import randomBall from 'components/randomBall'
+    import myBtn from 'components/myBtn'
     export default {
         name: "paperDetail",
         components: {
             randomBall,
-            mixSelect
+            mixSelect,
+            myBtn
         },
         data() {
             return {
@@ -72,6 +79,9 @@
                 this.$refs.random.setBall = val;
                 this.actIndex = index
             },
+            aaa(){
+                console.log(112)
+            }
         },
     }
 </script>
