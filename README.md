@@ -16,6 +16,5 @@ npm run build
 ```
 
 ### Preview
-```
+
 https://mikemuyc.github.io/MyComponents/dist/index
-```
