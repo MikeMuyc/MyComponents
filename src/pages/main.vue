@@ -13,9 +13,9 @@
                 </div>
 
                 <div class="right">
-                    <i class="iconfont icon-xiaoxi"></i>
+                    <i class="iconfont iconxiaoxi"></i>
 
-                    <i class="iconfont icon-tongzhi" ></i>
+                    <i class="iconfont icontongzhi" ></i>
                 </div>
             </div>
         </div>

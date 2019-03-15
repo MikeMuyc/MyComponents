@@ -9,7 +9,7 @@
                     @sentTo="getVal"
             >
             </mixSelect>
-            <p style="position: absolute;bottom: 10px;">可以无限级展开的菜单组件</p>
+            <p style="position: absolute;bottom: 10px;">可以无限级展开的菜单组件，因为是向右展开，请注意控制组件与浏览器右边界的距离</p>
         </div>
         <div class="square">
             <div class="btnLine">
@@ -34,10 +34,37 @@
             </vue-perfect-scrollbar>
         </div>
         <div class="square">
-            <myBtn type="normal" text="下一个" :handleClick="aaa"></myBtn>
+            <myBtn type="normal" text="下雪" :handleClick="snowy"></myBtn>
             <myBtn type="confirm" text="确认"></myBtn>
-            <myBtn type="cancel" text="取消"></myBtn>
-            <p style="position: absolute;bottom:20px">Vue中的render函数，适用于相同组件的不同状态的css样式呈现。</p>
+            <myBtn type="cancel" text="取消" :handleClick="cancelSnow"></myBtn>
+            <p style="position: absolute;bottom:30px">Vue中的render函数，适用于相同组件的不同状态的css样式呈现。{{text}}</p>
+            <p style="position: absolute;bottom:10px">Vue中为了支持JSX，需要通过一个JSX的Babel的插件。</p>
+            <i class="iconfont iconxuehua " v-for="item in snowList" :style="styleful(item)"></i>
+            <!--
+            package.json文件配置
+            devDependencies: {
+                "babel-helper-vue-jsx-merge-props": "2.0.3",
+                "babel-plugin-syntax-jsx": "6.18.0",
+                "babel-plugin-transform-vue-jsx": "3.7.0"
+            }
+            .babelrc文件配置
+            "presets": [
+                ["env", {
+                  "modules": false,
+                  "targets": {
+                    "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+                  }
+                }],
+                "stage-2"
+              ],
+             "plugins": ["transform-vue-jsx", "transform-runtime"],
+             "env": {
+                "test": {
+                  "presets": ["env", "stage-2"],
+                  "plugins": ["transform-vue-jsx", "transform-es2015-modules-commonjs", "dynamic-import-node"]
+                }
+              }
+            -->
         </div>
 
     </div>
@@ -60,10 +87,31 @@
                 testJson:testJson,
                 squareHeight:document.body.clientHeight - 100 + `px`,
                 actIndex:3,
+                text:`xxxxx`,
+                snowList:[
+
+                ],
+                fn1:null,
+                fn2:null,
+                iii:0,
+                tiemr:0,
             }
         },
         mounted(){
 
+        },
+        watch:{
+            snowList(){
+                if(this.iii>99){
+                    clearInterval(this.fn2);
+                    clearInterval(this.fn1);
+                    setTimeout(()=>{
+                        this.iii = 0;
+                        this.snowList = [];
+                        this.snowy();
+                    },3000);
+                }
+            }
         },
         methods: {
             goit(){
@@ -79,9 +127,45 @@
                 this.$refs.random.setBall = val;
                 this.actIndex = index
             },
-            aaa(){
-                console.log(112)
-            }
+            cancelSnow(){
+                clearInterval(this.fn2);
+                clearInterval(this.fn1);
+            },
+            snowy(){
+                this.fn2 = setInterval(()=>{
+                    clearInterval(this.fn1);
+                    this.tiemr = Math.random()*300 + 200;
+                    this.fn1 = setInterval(()=>{
+                        let px = parseInt(Math.random() * 500);
+                        this.snowList.push({
+                            left:px,
+                            top:-40,
+                            fontSize:36,
+                            rotate:0,
+                            opacity:1,
+                            transition: 3 + Math.random() * 2,
+                        });
+                        setTimeout(()=>{
+                            let top = document.body.clientHeight + parseInt(Math.random() * 500);
+                            let con1 = Math.random()>0.5 ? -1 : 1;
+                            let con2 = Math.random()>0.5 ? -1 : 1;
+                            this.$set(this.snowList,this.iii,{
+                                left:this.snowList[this.iii].left + con2 * (Math.random()*200 + 100),
+                                top:top,
+                                fontSize:10 + Math.random()*6,
+                                rotate: con1 * (Math.random() * 720 + 720),
+                                opacity:0.3,
+                            });
+                            this.iii++;
+                        },50)
+                    },this.tiemr);
+                },1000);
+
+            },
+            styleful(item){
+                let str = `left:${item.left}px;top:${item.top}px;opacity:${item.opacity};font-size:${item.fontSize}px;transform: rotate(${item.rotate}deg); transition:all ${item.transition}s linear;`;
+                return str;
+            },
         },
     }
 </script>
@@ -94,6 +178,7 @@
         margin: 20px auto;
         overflow: hidden;
         border: 1px solid #ddd;
+
         .square{
             float: left;
             width: 50%;
@@ -101,6 +186,7 @@
             padding: 20px;
             border: 1px solid #ddd;
             position: relative;
+            overflow: hidden;
             .btnLine{
                 margin-bottom: 20px;
                 overflow: hidden;
@@ -136,6 +222,14 @@
                 border: 0 none;
             }
         }
+    }
+    .iconxuehua{
+        font-size: 36px;
+        position: absolute;
+        left: 2px;
+        top: -40px;
+        color: #B7DFF4;
+        transition:all 5s linear;
     }
 
 </style>

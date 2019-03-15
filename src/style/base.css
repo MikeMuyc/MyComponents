@@ -65,7 +65,7 @@ table{
 body,html{
   height:100%;
   min-width: 1280px;
-
+  background-color: #fff;
   overflow-x: auto;
   overflow-y: hidden;
   font-family: "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;

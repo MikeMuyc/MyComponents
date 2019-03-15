@@ -1,6 +1,6 @@
 <template>
     <div id="randomBall">
-        <i class="iconfont icon-jiang"></i>
+        <i class="iconfont iconjiang"></i>
         <ul class="bolist">
             <li :style="{marginLeft:leftpx(index)}" :class="item" v-for="(item,index) in ball"></li>
         </ul>
