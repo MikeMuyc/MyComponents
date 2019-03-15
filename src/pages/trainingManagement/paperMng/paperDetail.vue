@@ -35,9 +35,9 @@
         </div>
         <div class="square">
             <myBtn type="normal" text="下雪" :handleClick="snowy"></myBtn>
-            <myBtn type="confirm" text="确认"></myBtn>
+           <!-- <myBtn type="confirm" text="确认"></myBtn>-->
             <myBtn type="cancel" text="取消" :handleClick="cancelSnow"></myBtn>
-            <p style="position: absolute;bottom:30px">Vue中的render函数，适用于相同组件的不同状态的css样式呈现。{{text}}</p>
+            <p style="position: absolute;bottom:30px">Vue中的render函数，适用于相同组件的不同状态的css样式呈现。点击“下雪”，开启动画效果</p>
             <p style="position: absolute;bottom:10px">Vue中为了支持JSX，需要通过一个JSX的Babel的插件。</p>
             <i class="iconfont iconxuehua " v-for="item in snowList" :style="styleful(item)"></i>
             <!--
