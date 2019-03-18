@@ -19,14 +19,4 @@ export default [
         path:'trainingManagement',
         redirect:'培训管理',
     },
-    {
-        name:"沟通",
-        path:"communication",
-        redirect:'',
-    },
-    {
-        name:"人员管理",
-        path:'personnelManagement',
-        redirect:'',
-    },
 ]

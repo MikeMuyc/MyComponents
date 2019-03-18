@@ -3,7 +3,7 @@
         <div class="singleBOX" v-clickoutside="handleClose" :class="{active:showflag}">
             <span class="valuebox" @click="showflag = !showflag" :title="labelText">
                 <em :class="{active:labelText!==`请选择`}">{{labelText}}</em>
-                <i class="iconfont icon-daosanjiao svgse" :class="{active:showflag}"></i>
+                <i class="iconfont icondaosanjiao svgse" :class="{active:showflag}"></i>
             </span>
             <transition name="slfade">
                 <tSelect v-if="showflag" :arr="list" :labelName="labelName" :valueName="valueName" :childrenName="childrenName"></tSelect>

@@ -35,9 +35,9 @@
         </div>
         <div class="square">
             <myBtn type="normal" text="下雪" :handleClick="snowy"></myBtn>
-           <!-- <myBtn type="confirm" text="确认"></myBtn>-->
+            <!--<myBtn type="confirm" text="确认"></myBtn>-->
             <myBtn type="cancel" text="取消" :handleClick="cancelSnow"></myBtn>
-            <p style="position: absolute;bottom:30px">Vue中的render函数，适用于相同组件的不同状态的css样式呈现。点击“下雪”，开启动画效果</p>
+            <p style="position: absolute;bottom:30px">Vue中的render函数，适用于相同组件不同状态的css样式呈现。点击“下雪”，开启动画</p>
             <p style="position: absolute;bottom:10px">Vue中为了支持JSX，需要通过一个JSX的Babel的插件。</p>
             <i class="iconfont iconxuehua " v-for="item in snowList" :style="styleful(item)"></i>
             <!--
@@ -66,7 +66,6 @@
               }
             -->
         </div>
-
     </div>
 </template>
 
@@ -95,19 +94,17 @@
                 fn2:null,
                 iii:0,
                 tiemr:0,
+                txt:``,
             }
         },
         mounted(){
-
+            window.vue = this;
         },
         watch:{
             snowList(){
-                if(this.iii>99){
-                    clearInterval(this.fn2);
-                    clearInterval(this.fn1);
+                if(this.iii>11){
+                    this.cancelSnow();
                     setTimeout(()=>{
-                        this.iii = 0;
-                        this.snowList = [];
                         this.snowy();
                     },3000);
                 }
@@ -130,36 +127,46 @@
             cancelSnow(){
                 clearInterval(this.fn2);
                 clearInterval(this.fn1);
+                this.fn2 = null;
+                this.fn1 = null;
+                setTimeout(()=>{
+                    this.iii = 0;
+                    this.snowList = [];
+                },3000);
             },
             snowy(){
-                this.fn2 = setInterval(()=>{
-                    clearInterval(this.fn1);
-                    this.tiemr = Math.random()*300 + 200;
-                    this.fn1 = setInterval(()=>{
-                        let px = parseInt(Math.random() * 500);
-                        this.snowList.push({
-                            left:px,
-                            top:-40,
-                            fontSize:36,
-                            rotate:0,
-                            opacity:1,
-                            transition: 3 + Math.random() * 2,
-                        });
-                        setTimeout(()=>{
-                            let top = document.body.clientHeight + parseInt(Math.random() * 500);
-                            let con1 = Math.random()>0.5 ? -1 : 1;
-                            let con2 = Math.random()>0.5 ? -1 : 1;
-                            this.$set(this.snowList,this.iii,{
-                                left:this.snowList[this.iii].left + con2 * (Math.random()*200 + 100),
-                                top:top,
-                                fontSize:10 + Math.random()*6,
-                                rotate: con1 * (Math.random() * 720 + 720),
-                                opacity:0.3,
+                if(this.fn2){}
+                else{
+                    this.fn2 = setInterval(()=>{
+                        clearInterval(this.fn1);
+                        this.tiemr = Math.random()*300 + 200;
+                        this.fn1 = setInterval(()=>{
+                            let px = parseInt(Math.random() * 500);
+                            this.snowList.push({
+                                left:px,
+                                top:-40,
+                                fontSize:36,
+                                rotate:0,
+                                opacity:1,
+                                transition: 3 + Math.random() * 2,
                             });
-                            this.iii++;
-                        },50)
-                    },this.tiemr);
-                },1000);
+                            setTimeout(()=>{
+                                let top = document.body.clientHeight + parseInt(Math.random() * 500);
+                                let con1 = Math.random()>0.5 ? -1 : 1;
+                                let con2 = Math.random()>0.5 ? -1 : 1;
+                                this.$set(this.snowList,this.iii,{
+                                    left:this.snowList[this.iii].left + con2 * (Math.random()*200 + 100),
+                                    top:top,
+                                    fontSize:10 + Math.random()*6,
+                                    rotate: con1 * (Math.random() * 720 + 720),
+                                    opacity:0.3,
+                                });
+                                this.iii++;
+                            },50)
+                        },this.tiemr);
+                    },1000);
+                }
+
 
             },
             styleful(item){
