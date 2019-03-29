@@ -68,7 +68,7 @@ body,html{
   background-color: #fff;
   overflow-x: auto;
   overflow-y: hidden;
-  font-family: "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB",Arial,sans-serif;
   font-size: 14px;
   margin: 0 auto;
   color: #333;

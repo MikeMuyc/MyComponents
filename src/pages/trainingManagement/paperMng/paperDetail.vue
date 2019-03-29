@@ -1,5 +1,5 @@
 <template>
-    <div id="paperDetail" :style="{height:squareHeight}">
+    <div id="paperDetail" >
         <div class="square">
             <mixSelect
                     :selectList="testJson"
@@ -66,6 +66,9 @@
               }
             -->
         </div>
+        <div class="square" style="width: 100%;height: auto;padding: 20px 0;">
+            <calendar></calendar>
+        </div>
     </div>
 </template>
 
@@ -74,17 +77,19 @@
     import testJson from 'json/testJson'
     import randomBall from 'components/randomBall'
     import myBtn from 'components/myBtn'
+    import calendar from 'components/calendar'
     export default {
         name: "paperDetail",
         components: {
             randomBall,
             mixSelect,
-            myBtn
+            myBtn,
+            calendar
         },
         data() {
             return {
                 testJson:testJson,
-                squareHeight:document.body.clientHeight - 100 + `px`,
+                //squareHeight:document.body.clientHeight - 100 + `px`,
                 actIndex:3,
                 text:`xxxxx`,
                 snowList:[
@@ -95,14 +100,17 @@
                 iii:0,
                 tiemr:0,
                 txt:``,
+
+
             }
         },
         mounted(){
-            window.vue = this;
+            //window.vue = this;
+
         },
         watch:{
             snowList(){
-                if(this.iii>11){
+                if(this.iii>111){
                     this.cancelSnow();
                     setTimeout(()=>{
                         this.snowy();
@@ -145,7 +153,7 @@
                             this.snowList.push({
                                 left:px,
                                 top:-40,
-                                fontSize:36,
+                                fontSize:24 + Math.random()*12,
                                 rotate:0,
                                 opacity:1,
                                 transition: 3 + Math.random() * 2,
@@ -157,9 +165,9 @@
                                 this.$set(this.snowList,this.iii,{
                                     left:this.snowList[this.iii].left + con2 * (Math.random()*200 + 100),
                                     top:top,
-                                    fontSize:10 + Math.random()*6,
+                                    fontSize:10 + Math.random()*8,
                                     rotate: con1 * (Math.random() * 720 + 720),
-                                    opacity:0.3,
+                                    opacity:0.2,
                                 });
                                 this.iii++;
                             },50)
@@ -173,6 +181,8 @@
                 let str = `left:${item.left}px;top:${item.top}px;opacity:${item.opacity};font-size:${item.fontSize}px;transform: rotate(${item.rotate}deg); transition:all ${item.transition}s linear;`;
                 return str;
             },
+
+
         },
     }
 </script>
@@ -189,7 +199,7 @@
         .square{
             float: left;
             width: 50%;
-            height: 50%;
+            height: 400px;
             padding: 20px;
             border: 1px solid #ddd;
             position: relative;
