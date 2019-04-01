@@ -12,7 +12,7 @@
         </div>
         <div class="calebox">
             <div class="cale" :class="{thisMonth:item.thisMonth}" v-for="item in dayList">
-                <div class="hoverBorder" :class="{active:isToday(item.date)}">
+                <div class="hoverBorder" :class="{active:isToday(item.date,item.thisMonth)}">
                     <div class="caleLine right">{{item.date}}</div>
                     <div class="caleLine">上班</div>
                     <div class="caleLine">下班</div>
@@ -103,8 +103,8 @@
                 //暴力刷新
                 this.$forceUpdate();
             },
-            isToday(date){
-                return new Date().getDate() === date && this.month === new Date().getMonth() && new Date().getFullYear() === this.year;
+            isToday(date,bool){
+                return new Date().getDate() === date && this.month === new Date().getMonth() && new Date().getFullYear() === this.year && bool;
             }
         },
     }
