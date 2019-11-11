@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import scroll from './scrollbar';
-import './scrollbar/css/perfect-scrollbar.css';
+  import scroll from 'perfect-scrollbar';
+  import 'perfect-scrollbar/css/perfect-scrollbar.css';
 var scrollBar = null;
 
 export default {

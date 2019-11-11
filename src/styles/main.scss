@@ -1,0 +1,189 @@
+$white-color: #fff;
+$border-color: #d7dee3;                             //边框颜色
+$normal-border:solid 1px $border-color;             //通用边框样式
+$style-red:#e43879;                                 //主题桃红色
+$active-red:#E95F93;
+$style-green:#00c185;                               //主题色绿
+
+/*进入离开过渡动画*/
+.myfade-enter-active {
+    transition: opacity .2s;
+}
+
+.myfade-leave-active {
+
+}
+
+.myfade-enter, .myfade-leave-to {
+    opacity: 0;
+}
+/**公用类样式**/
+input:focus,textarea:focus{
+    border-color:$style-red;
+}
+textarea{
+    border-radius: 2px;
+}
+.centerFlex{
+    display: flex;
+    align-items: center;
+}
+.flex-1{
+    flex:1
+}
+
+.normalbtn{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    min-width: 70px;
+    height: 30px;
+    margin: 0 10px;
+    background-color: #828db4;
+    border-radius: 2px;
+    color: $white-color;
+    cursor: pointer;
+    user-select: none;
+    &.close{
+        background-color: #ecf2f8;
+    }
+}
+.Cardbody{
+    display: inline-flex;
+    padding:0 10px;
+    height: 24px;
+    margin: 0 4px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+}
+.greenCard{
+    @extend .Cardbody;
+    color: $style-green;
+    border: 1px solid $style-green;
+}
+.grayCard{
+    @extend .Cardbody;
+    color: #828db4;
+    border: 1px solid #828db4;
+}
+.orangeCard{
+    @extend .Cardbody;
+    color: #ff7b2c;
+    border: 1px solid #ff7b2c;
+
+}
+.redCard{
+    @extend .Cardbody;
+    color: $style-red;
+    border: 1px solid $style-red;
+}
+.mytag{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 56px;
+    height: 28px;
+    padding:  0 12px;
+    background-color: #ecf2f8;
+    color:#666;
+    border-radius: 14px;
+    margin: 0 20px 20px 0;
+    cursor: pointer;
+    user-select: none;
+}
+.mytag.active{
+    background-color: #e43879;
+    color: $white-color;
+}
+.searchbox{
+    width: 225px;
+    font-size: 14px;
+    height: 30px;
+    background-color: rgba(130,141,180,0.2);
+    border-radius: 15px;
+    @extend .centerFlex;
+    position: relative;
+    .searchSvg{
+        position: absolute;
+        left: 10px;
+        top: 6px;
+        width: 18px;
+        height: 18px;
+    }
+    .searchInput{
+        position: absolute;
+        left: 32px;
+        top: 0;
+        border: 0 none;
+        height: 30px;
+        background-color: rgba(130,141,180,0);
+        width: 168px;
+        color: #666;
+    }
+}
+.currentArea{
+    @extend .centerFlex;
+    height: 32px;
+    border-radius: 2px;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0 8px;
+    margin: 0 6px;
+    &.active{
+        background: $style-red;
+        color: $white-color;
+    }
+}
+
+
+
+
+
+.rowline{
+    margin-bottom: 30px;
+    @extend .centerFlex;
+    .label{
+        width: 120px;
+        //text-align: right;
+        padding-right: 30px;
+    }
+    .right{
+        width: calc(100% - 120px);
+        @extend .centerFlex;
+        flex-wrap: wrap;
+        .searchbox{
+            input[type=text]{
+                width: 230px;
+                height: 32px;
+                border-radius: 2px 0px 0px 2px;
+                &:focus{
+                    border-color: $style-red;
+                    border-right-color: #ccc;
+                }
+            }
+            button{
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #828db4;
+                border-radius: 0px 2px 2px 0px;
+                color: #fff;
+                height: 32px;
+                width: 50px;
+                cursor: pointer;
+            }
+        }
+    }
+}
+.rowInput{
+    height: 40px;
+    border-radius: 4px;
+}
+.rowInput:focus{
+    border-color: $style-red;
+}
+

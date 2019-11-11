@@ -41,7 +41,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../style/main";
+    @import "../styles/main";
     .tSelect {
         z-index: 99;
         position: absolute;

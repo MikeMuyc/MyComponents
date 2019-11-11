@@ -52,7 +52,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../style/main";
+    @import "../styles/main";
     .singleBOX{
         width: 100%;
         max-width: 160px;

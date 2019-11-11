@@ -34,7 +34,7 @@
 
         },
         methods: {
-            snowy(){
+            snowyBeing(){
                 if(this.fn2){}
                 else{
                     this.fn2 = setInterval(()=>{

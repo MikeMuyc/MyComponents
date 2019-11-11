@@ -42,7 +42,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import '../style/main';
+    @import '../styles/main';
     .mybtn{
         padding: 0 10px;
         height: 30px;

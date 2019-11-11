@@ -4,19 +4,15 @@ export default [
         path:"index",
         redirect:'',
     },
+
     {
-        name:"学习",
-        path:'learning',
-        redirect:'',
+        name:"裁剪",
+        path:'cropper',
+        redirect:'裁剪组件',
     },
     {
-        name:"题库",
-        path:'questionBank',
-        redirect:'',
-    },
-    {
-        name:"培训管理",
-        path:'trainingManagement',
-        redirect:'培训管理',
+        name:"组件",
+        path:'content',
+        redirect:'组件',
     },
 ]
