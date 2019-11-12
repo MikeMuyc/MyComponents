@@ -142,14 +142,25 @@ textarea{
 
 
 
-
+.contentBody{
+    width: 1180px;
+    margin: 20px auto 0;
+}
 .rowline{
     margin-bottom: 30px;
     @extend .centerFlex;
-    .label{
+    .label {
         width: 120px;
         //text-align: right;
         padding-right: 30px;
+        position: relative;
+        .note {
+            font-size: 15px;
+            color: red;
+            position: absolute;
+            left: -6px;
+            top: -2px;
+        }
     }
     .right{
         width: calc(100% - 120px);

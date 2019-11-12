@@ -6,7 +6,6 @@
 
                 <div class="nav">
                     <div @click="navRouteTo(item.redirect)" v-for="item in navlist" class="itemli">
-
                         <div class="txt">{{item.name}}</div>
                     </div>
                     <div class="whiteHover" :style="whiteStyle"></div>
@@ -107,11 +106,29 @@
 
     .nav {
         flex: 1;
-        display: flex;
-        align-items: center;
         height: 60px;
         position: relative;
+        display: flex;
         z-index: 1;
+        .itemli {
+            display: flex;
+            align-items: center;
+            height: 60px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .itemli .txt {
+            width: 100px;
+            text-align: center;
+            color: #fff;
+            font-size: 16px;
+            transition: .3s;
+        }
+
+        .itemli.active .txt {
+            color: #fff;
+        }
         .whiteHover {
             height: 60px;
             width: 100px;
@@ -140,23 +157,7 @@
         }
     }
 
-    .itemli {
 
-    }
-
-    .itemli .txt {
-        width: 100px;
-        text-align: center;
-        color: #fff;
-        font-size: 16px;
-        transition: .3s;
-        cursor: pointer;
-        user-select: none;
-    }
-
-    .itemli.active .txt {
-        color: #fff;
-    }
 
     .headCenter .right {
         .iconfont {
