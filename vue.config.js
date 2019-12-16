@@ -26,6 +26,19 @@ module.exports = {
     },
 
     chainWebpack: config => {
+        config.module.rule('scss').oneOfs.store.forEach(item => {
+            item
+                .use('sass-resources-loader')
+                .loader('sass-resources-loader')
+                .options({
+                    // Provide path to the file with resources
+                    resources: './src/styles/mainVariables.scss',
+                    // Or array of paths
+                    //resources: ['./path/to/vars.scss', './path/to/mixins.scss']
+                })
+                .end()
+        })
+
         config.resolve.alias
             .set("@", resolve("src"))
     },
@@ -78,15 +91,6 @@ module.exports = {
                 jQuery: "jquery",
                 "windows.jQuery": "jquery"
             }),
-            new CompressionWebpackPlugin({
-                test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
-                threshold: 10240,
-                deleteOriginalAssets: false
-            }),
-            new WebpackNotifierPlugin({alwaysNotify: true}),
-            /*new BundleAnalyzerPlugin({
-                analyzerPort: 6543
-            })*/
         ]
     },
 };

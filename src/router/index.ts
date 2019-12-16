@@ -37,7 +37,12 @@ export default new Router({
                     name: '裁剪组件',
                     component: () =>
                         import ('@/views/content/cropperCtrl.vue'),
-
+                },
+                {
+                    path: 'PDFviewer',
+                    name: 'PDF预览',
+                    component: () =>
+                        import ('@/views/content/PDFviewer.vue'),
                 },
             ]
         }

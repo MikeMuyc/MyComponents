@@ -1,0 +1,30 @@
+$white-color: #fff;
+$border-color: #d7dee3;                             //边框颜色
+$normal-border:solid 1px $border-color;             //通用边框样式
+
+$style-red:#e43879;                                 //主题桃红色
+$active-red:#E95F93;
+
+$style-green:#00c185;                               //主题色绿
+
+
+:root {
+    --colorful: #354ef2;  //--colorful  是变量名，css3有规则
+    --colorful-active: #0f2ef6;
+    --colorful-shadow: #DBDFFD;
+}
+$theme-color: var(--colorful);
+$theme-color-active: var(--colorful-active);
+$theme-color-shadow: var(--colorful-shadow);
+
+$red-theme-color: #e41e33; //主题颜色
+
+.centerFlex {
+    display: flex;
+    align-items: center;
+}
+
+.flex-1 {
+    flex: 1
+}
+

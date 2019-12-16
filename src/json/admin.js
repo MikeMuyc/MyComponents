@@ -4,7 +4,11 @@ export default [
         path:"index",
         redirect:'',
     },
-
+    {
+        name:"PDF预览",
+        path:'PDFviewer',
+        redirect:'PDF预览',
+    },
     {
         name:"裁剪",
         path:'cropper',

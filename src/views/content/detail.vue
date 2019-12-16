@@ -133,7 +133,7 @@
 </script>
 
 <style scoped lang="scss">
-    @import "../../styles/main";
+
     #detail {
         width: 80%;
         min-width: 1180px;
@@ -168,8 +168,8 @@
             user-select: none;
         }
         .start{
-            border: 1px solid $style-red;
-            color: $style-red;
+            border: 1px solid $theme-color;
+            color: $theme-color;
         }
         .stop{
             color: #666;
@@ -177,9 +177,9 @@
         }
         .set{
             border: 1px solid #999;
-            color: $style-red;
+            color: $theme-color;
             &.active{
-                background-color: $style-red;
+                background-color: $theme-color;
                 color: white;
                 border: 0 none;
             }

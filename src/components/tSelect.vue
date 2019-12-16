@@ -1,14 +1,16 @@
 <template>
     <div class="tSelect" ref="tSelect">
-        <div class="tLine" v-for="(item,index) in arr" >
-            <div class="tLabel" @mouseenter="hoverIndex = index" @click="sentVal(item[valueName],item[labelName])">
-                {{item[labelName]}}
+        <div class="tLine" :class="{hover:hoverIndex === index}" v-for="(item,index) in arr" >
+            <div v-if="item[labelName]" class="tLabel" @mouseenter="hoverIndex = index" @click="sentVal(item[valueName],item[labelName])">
+                {{item[labelName] || item}}
             </div>
-            <i class="iconfont iconjiantou" v-if="item[childrenName]"></i>
+            <div v-else class="tLabel" @mouseenter="hoverIndex = index" @click="sentVal2(item)">
+                {{item}}
+            </div>
+            <i class="iconfont iconjiantou1" v-if="item[childrenName] && item[childrenName].length>0"></i>
             <transition name="tfade">
-                <tSelect v-if="item[childrenName] && hoverIndex === index" v-show="hoverIndex === index" :arr="item[childrenName]" :style="{left:leftVal}" :labelName="labelName" :valueName="valueName" :childrenName="childrenName"></tSelect>
+                <tSelect v-if="item[childrenName] && hoverIndex === index" v-show="hoverIndex === index" :arr="item[childrenName]" :style="{left:leftVal}" :labelName="labelName" :valueName="valueName" :childrenName="childrenName" :busName="busName"></tSelect>
             </transition>
-
         </div>
     </div>
 
@@ -18,14 +20,16 @@
     import bus from './eventBus'
     export default {
         name: "tSelect",
-        props:[`arr`,`labelName`,`valueName`,`childrenName`],
+        props:[`arr`,`labelName`,`valueName`,`childrenName`,`busName`],
         data() {
             return {
                 hoverIndex:-1,
                 leftVal:``,
+                theight:'',
             }
         },
         mounted(){
+
             this.$nextTick(() => {
                 this.leftVal = this.$refs.tSelect.clientWidth + 5 + `px`
             });
@@ -33,15 +37,20 @@
         methods: {
             sentVal(val,name){
                 if(val){
-                    bus.$emit(`tsObj`,{val:val,name:name})
+                    bus.$emit(`${this.busName}`,{val:val,name:name})
                 }
             },
+            sentVal2(item){
+                bus.$emit(`${this.busName}2`,item)
+            }
         },
     }
 </script>
 
 <style lang="scss" scoped>
-    @import "../styles/main";
+    $white-color:#fff;
+    $theme-color:#0095ff;
+    $theme-color-active: #354ef2;
     .tSelect {
         z-index: 99;
         position: absolute;
@@ -49,9 +58,19 @@
         margin-bottom: 20px;
         background: #fff;
         border-radius: 2px;
-        border: 1px solid #ddd;
+        border: 1px solid #ccc;
+        transform-origin: center top 0;
         .tLine{
             position: relative;
+            &:hover,&.hover{
+                >.tLabel{
+                    background-color: $theme-color;
+                    color: $white-color;
+                }
+                >.iconfont{
+                    color: #fff;
+                }
+            }
             .tLabel{
                 padding: 10px 15px 10px 10px;
                 height: 36px;
@@ -60,21 +79,18 @@
                 user-select: none;
                 cursor: pointer;
                 white-space: nowrap;
-                &:hover{
-                    background-color: #f5f7fa;
-                }
                 &:active{
-                    box-shadow: inset 0 3px 6px 3px #eee;
+                    background-color:$theme-color-active;
                 }
             }
         }
-        .iconjiantou{
+        .iconfont{
             position: absolute;
             right: 1px;
-            top: calc(50% - 10px);
+            top: calc(50% - 8px);
             font-size: 8px;
             display: block;
-            transform: rotate(180deg);
+            /*transform: rotate(180deg);*/
         }
     }
 

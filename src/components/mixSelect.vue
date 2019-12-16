@@ -1,12 +1,12 @@
 <template>
     <div class="mixSelect">
         <div class="singleBOX" v-clickoutside="handleClose" :class="{active:showflag}">
-            <span class="valuebox" @click="showflag = !showflag" :title="labelText">
+            <span class="valuebox" @click="showTs" :title="labelText">
                 <em :class="{active:labelText!==`请选择`}">{{labelText}}</em>
                 <i class="iconfont icondaosanjiao svgse" :class="{active:showflag}"></i>
             </span>
             <transition name="slfade">
-                <tSelect v-if="showflag" :arr="list" :labelName="labelName" :valueName="valueName" :childrenName="childrenName"></tSelect>
+                <tSelect v-if="showflag" :arr="selectList" :labelName="labelName" :valueName="valueName" :childrenName="childrenName" :busName="busEventName"></tSelect>
                 <!--组件递归调用实现无限级展开菜单，需要eventBus.js事件总线做参数中转，传递选中项的name和value。-->
             </transition>
         </div>
@@ -21,25 +21,78 @@
         components: {
             tSelect
         },
-        props:[`selectList`,`labelName`,`valueName`,`childrenName`],
+        model: {
+            prop: 'value',
+            event:  `sentTo`,
+        },
+        props:{
+            value:Number,
+            selectList:{
+                required: true,
+                type:Array,
+                default:function () {
+                    return []
+                },
+            },
+            labelName:{
+                type:String,
+                default:`name`,
+            },
+            valueName:{
+                type:String,
+                default:`value`,
+            },
+            childrenName:{
+                type:String,
+                default:`children`,
+            },
+            keyId:{
+                type:Number,
+                default:parseInt(Math.random()*10000),
+            },
+
+        },
         data() {
             return {
                 showflag:false,
                 labelText:`请选择`,
                 list:[],
+                busEventName:`tsObj_`+ parseInt(Math.random()*1000),
             }
         },
         computed:{
 
         },
-        mounted(){
-            if(this.selectList){
-                this.list = this.selectList
+        watch:{
+            selectList:function () {
+                this.list = [];
+                this.list = this.selectList.slice(0)
+                this.list.forEach(item=>{
+                    if(parseInt(item[this.valueName]) === this.value){
+                        this.labelText = item[this.labelName]
+                    }
+                })
             }
+        },
+        mounted(){
+            this.list = this.selectList.slice(0);
+            this.list.forEach(item=>{
+                if(parseInt(item[this.valueName]) === this.value){
+                    this.labelText = item[this.labelName]
+                }
+            })
+
+
+
             let _this = this;
-            bus.$on(`tsObj`,function(data){
+            bus.$on(`${this.busEventName}`,function(data){
                 _this.labelText = data.name;
                 _this.$emit(`sentTo`,data.val);
+                _this.showflag = false;
+            });
+            bus.$on(`${this.busEventName}2`,function(item){
+                _this.labelText = item;
+                _this.$emit(`sentTo`,item);
                 _this.showflag = false;
             });
         },
@@ -47,17 +100,27 @@
             handleClose(){
                 this.showflag = false;
             },
+            showTs(){
+                if(this.selectList.length>0){
+                    this.showflag = !this.showflag
+                }
+            },
+        },
+        destroyed(){
+            bus.$off(`${this.busEventName}2`);
+            bus.$off(`${this.busEventName}`);
         },
     }
 </script>
 
 <style lang="scss" scoped>
-    @import "../styles/main";
+    $theme-color:#0095ff;
     .singleBOX{
+        background-color: #fff;
         width: 100%;
         max-width: 160px;
         height: 30px;
-        border: 1px solid #ddd;
+        border: 1px solid #ccc;
         position: relative;
         padding: 0 6px 0 10px;
         display: inline-flex;
@@ -76,7 +139,7 @@
         position: relative;
     }
     .singleBOX.active{
-        border-color: $style-red;
+        border-color: $theme-color;
     }
     .valuebox>em{
         display: inline-block;
@@ -85,6 +148,7 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         color: #999;
+        font-style: normal;
     }
     .valuebox>em.active{
         color: #333;
@@ -101,36 +165,27 @@
         color: #999;
     }
     .svgse.active{
+        transform-origin: center 5px 0;
         transform: rotate(180deg);
-        color: $style-red;
+        color: $theme-color;
     }
     .singleBOX>.tSelect{
+        transform-origin: center top 0;
         top: 32px;
         left: 0;
         min-width: 100%;
     }
     /*过渡动画*/
-    .slfade-enter-active {
+    .slfade-enter-active,.slfade-leave-active {
         transition: all .3s;
         transform-origin: center top 0;
         transform: rotateX(0deg);
     }
 
-    .slfade-leave-active {
-        transition: all .3s;
-        transform-origin: center top 0;
-        transform: rotateX(0deg);
-    }
-
-    .slfade-enter{
+    .slfade-enter,.slfade-leave-to{
         opacity: 0;
         transform: rotateX(90deg);
         transform-origin: center top 0;
     }
 
-    .slfade-leave-to {
-        opacity: 0;
-        transform: rotateX(90deg);
-        transform-origin: center top 0;
-    }
 </style>

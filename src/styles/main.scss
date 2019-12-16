@@ -1,9 +1,4 @@
-$white-color: #fff;
-$border-color: #d7dee3;                             //边框颜色
-$normal-border:solid 1px $border-color;             //通用边框样式
-$style-red:#e43879;                                 //主题桃红色
-$active-red:#E95F93;
-$style-green:#00c185;                               //主题色绿
+@import "./mainVariables";
 
 /*进入离开过渡动画*/
 .myfade-enter-active {
@@ -19,18 +14,12 @@ $style-green:#00c185;                               //主题色绿
 }
 /**公用类样式**/
 input:focus,textarea:focus{
-    border-color:$style-red;
+    border-color:$theme-color;
 }
 textarea{
     border-radius: 2px;
 }
-.centerFlex{
-    display: flex;
-    align-items: center;
-}
-.flex-1{
-    flex:1
-}
+
 
 .normalbtn{
     display: inline-flex;
@@ -134,7 +123,7 @@ textarea{
     padding: 0 8px;
     margin: 0 6px;
     &.active{
-        background: $style-red;
+        background: $theme-color;
         color: $white-color;
     }
 }
@@ -172,7 +161,7 @@ textarea{
                 height: 32px;
                 border-radius: 2px 0px 0px 2px;
                 &:focus{
-                    border-color: $style-red;
+                    border-color: $theme-color;
                     border-right-color: #ccc;
                 }
             }
@@ -195,6 +184,6 @@ textarea{
     border-radius: 4px;
 }
 .rowInput:focus{
-    border-color: $style-red;
+    border-color: $theme-color;
 }
 

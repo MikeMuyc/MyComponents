@@ -1,5 +1,4 @@
 import ECharts from '@/components/ECharts.vue';
-
 import {Message} from "element-ui";
 
 
@@ -144,7 +143,6 @@ export default {
                         binding.value(e)
                     }
                 }
-
                 // @ts-ignore
                 el._vueClickOutside_ = documentHandler;
                 document.addEventListener('click', documentHandler);
@@ -154,6 +152,5 @@ export default {
                 delete el._vueClickOutside_;
             }
         });
-
     }
 }

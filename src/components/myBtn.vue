@@ -42,7 +42,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import '../styles/main';
+
     .mybtn{
         padding: 0 10px;
         height: 30px;
@@ -54,20 +54,20 @@
         user-select: none;
         margin: 0 5px;
         &.normal{
-            background-color: $style-red;
-            border-color: $style-red;
+            background-color: $theme-color;
+            border-color: $theme-color;
             color: #fff;
             &:active{
-                background-color: $active-red;
+                background-color: $theme-color-active;
             }
         }
         &.confirm{
             background-color: #fff;
-            border-color: $style-red;
-            color: $style-red;
+            border-color: $theme-color;
+            color: $theme-color;
             &:active{
-                box-shadow: inset 0 2px 3px 2px #F9E8F1;
-                border-color: $active-red;
+                box-shadow: inset 0 2px 3px 2px $theme-color-shadow;
+                border-color: $theme-color-active;
             }
         }
         &.cancel{
