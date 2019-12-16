@@ -24,7 +24,7 @@ module.exports = {
             }
         }
     },
-
+    publicPath:`./`,
     chainWebpack: config => {
         config.module.rule('scss').oneOfs.store.forEach(item => {
             item
