@@ -1,17 +1,27 @@
 <template>
-    <div class="tSelect" ref="tSelect">
-        <div class="tLine" :class="{hover:hoverIndex === index}" v-for="(item,index) in arr" >
-            <div v-if="item[labelName]" class="tLabel" @mouseenter="hoverIndex = index" @click="sentVal(item[valueName],item[labelName])">
-                {{item[labelName] || item}}
+    <div class="tSelect" ref="tSelect" >
+        <vue-perfect-scrollbar ref="tScroll" :style="{height:theight}">
+            <div class="tLine" :class="{hover:hoverIndex === index}" v-for="(item,index) in arr" >
+                <div v-if="item[labelName]" class="tLabel" @mouseenter="mouseEnter(index,item)" @click="sentVal(item)">
+                    {{item[labelName] || item}}
+                </div>
+                <div v-else class="tLabel" @mouseenter="mouseEnter(index,item)" @click="sentVal2(item)">
+                    {{item}}
+                </div>
+                <div class="rowIcon" v-if="item[childrenName] && item[childrenName].length>0">
+                    <slot name="rowIcon">
+                        <i class="iconfont" :class="rowIconName"></i>
+                    </slot>
+                </div>
+
+
             </div>
-            <div v-else class="tLabel" @mouseenter="hoverIndex = index" @click="sentVal2(item)">
-                {{item}}
-            </div>
-            <i class="iconfont iconjiantou1" v-if="item[childrenName] && item[childrenName].length>0"></i>
-            <transition name="tfade">
-                <tSelect v-if="item[childrenName] && hoverIndex === index" v-show="hoverIndex === index" :arr="item[childrenName]" :style="{left:leftVal}" :labelName="labelName" :valueName="valueName" :childrenName="childrenName" :busName="busName"></tSelect>
-            </transition>
-        </div>
+        </vue-perfect-scrollbar>
+        <transition name="tfade">
+            <tSelect v-if="Titem[childrenName] && Titem[childrenName].length>0 && hoverIndex === Tindex" v-show="hoverIndex === Tindex" :arr="Titem[childrenName]" :style="{left:leftVal,top:topVal}" :labelName="labelName" :valueName="valueName" :childrenName="childrenName" :busName="busName" :rowIconName="rowIconName">
+                <slot name="rowIcon" slot="rowIcon"></slot>
+            </tSelect>
+        </transition>
     </div>
 
 </template>
@@ -20,24 +30,83 @@
     import bus from './eventBus'
     export default {
         name: "tSelect",
-        props:[`arr`,`labelName`,`valueName`,`childrenName`,`busName`],
+        props:{
+            arr:{
+                required: true,
+                type:Array,
+                default:function () {
+                    return []
+                },
+            },
+            labelName:{
+                type:String,
+                default:`name`,
+            },
+            valueName:{
+                type:String,
+                default:`value`,
+            },
+            childrenName:{
+                type:String,
+                default:`children`,
+            },
+            maxViewItem:{
+                type:Number,
+                default:6,
+            },
+            busName:{
+                type:String,
+            },
+            rowIconName:{
+                type:String,
+                default:'iconjiantou1',
+            },
+        },
+            // [`arr`,`labelName`,`valueName`,`childrenName`,`busName`,`maxViewItem`]
         data() {
             return {
                 hoverIndex:-1,
                 leftVal:``,
+                topVal:``,
                 theight:'',
+                Titem:{},
+                Tindex:-1,
+            }
+        },
+        watch:{
+            arr:function () {
+                if(this.arr.length>this.maxViewItem){
+                    this.theight = 36*this.maxViewItem + `px`;
+                }
+                else{
+                    this.theight = 36*this.arr.length + `px`;
+                }
+                setTimeout(()=>{
+                    this.leftVal = this.$refs.tSelect.clientWidth + 5 + `px`;
+                },100)
+                this.hoverIndex = -1;
+            },
+            hoverIndex:function (val) {
+                this.topVal = val*36 - this.$refs.tScroll.$el.scrollTop + `px`;
             }
         },
         mounted(){
-
+            if(this.arr.length>this.maxViewItem){
+                this.theight = 36*this.maxViewItem + `px`;
+            }
             this.$nextTick(() => {
                 this.leftVal = this.$refs.tSelect.clientWidth + 5 + `px`
             });
         },
         methods: {
-            sentVal(val,name){
-                if(val){
-                    bus.$emit(`${this.busName}`,{val:val,name:name})
+            mouseEnter(index,item){
+                this.hoverIndex = index;
+                this.Titem = item;
+                this.Tindex = index;
+            },
+            sentVal(item){
+                if(item[this.valueName] !== undefined){
+                    bus.$emit(`${this.busName}`,item)
                 }
             },
             sentVal2(item){
@@ -49,7 +118,7 @@
 
 <style lang="scss" scoped>
     $white-color:#fff;
-    $theme-color:#0095ff;
+    $theme-color:#495FF3;
     $theme-color-active: #354ef2;
     .tSelect {
         z-index: 99;
@@ -67,12 +136,12 @@
                     background-color: $theme-color;
                     color: $white-color;
                 }
-                >.iconfont{
+                .iconfont{
                     color: #fff;
                 }
             }
             .tLabel{
-                padding: 10px 15px 10px 10px;
+                padding: 10px 16px 10px 10px;
                 height: 36px;
                 display:flex;
                 align-items: center;
@@ -84,13 +153,18 @@
                 }
             }
         }
-        .iconfont{
+        .rowIcon{
             position: absolute;
-            right: 1px;
-            top: calc(50% - 8px);
-            font-size: 8px;
-            display: block;
-            /*transform: rotate(180deg);*/
+            right: 0;
+            top: 0;
+            width: 16px;
+            height: 100%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            .iconfont{
+                font-size: 8px;
+            }
         }
     }
 

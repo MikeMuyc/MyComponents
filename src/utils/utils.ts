@@ -72,30 +72,47 @@ const utils: any = {
     },
     //必填项不为空的验证
     isntNull: (data: any, name: any) => {
-        if(Array.isArray(data)){
+        /*
+        * data 为数据源
+        * name 为数据源对应每一项的名称，例如：
+        * {
+        *       "presonBasicInfo.name": `姓名`,
+        *       "address": `地址`,
+        * }
+        * */
+        if (Array.isArray(data)) {
             let flag = false;
-            for(let i=0;i<data.length;i++){
-                if(!content(data[i],name[i])){
+            for (let i = 0; i < data.length; i++) {
+                if (!content(data[i], name[i])) {
                     break;
                 }
             }
             return flag
-        }
-        else if(typeof data === 'object') {
+        } else if (typeof data === 'object') {
             let flag = true;
-            for(let key in data){
-                if(!content(data[key],name[key])){
-                    flag = false;
-                    break;
+            for (let key in name) {
+
+                if (eval(`data.${key}`) !== undefined) {
+                    if (!content(eval(`data.${key}`), name[key])) {
+                        flag = false;
+                        break;
+                    }
                 }
             }
+            /* for (let key in data) {
+                 if (name[key]) {
+                     if (!content(data[key], name[key])) {
+                         flag = false;
+                         break;
+                     }
+                 }
+             }*/
             return flag
-        }
-        else if (typeof data === 'string') {
-            return content(data,name);
+        } else if (typeof data === 'string') {
+            return content(data, name);
         }
 
-        function content(obj,objName) {
+        function content(obj, objName) {
             if (obj === '' || obj === null || obj === undefined) {
                 Message({
                     showClose: true,
@@ -110,9 +127,50 @@ const utils: any = {
     },
 
     //手机号码验证（2019）
-    phoneLimit(phone){
+    phoneLimit(phone: string) {
         let reg = /^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$/;
-        return(reg.test(phone));
+        return reg.test(phone);
+    },
+    //身份证校验（15/18位）
+    idCardLimit(id: string) {
+        let reg = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/ || /^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$/
+        return reg.test(id);
+    },
+    //正整数限制（含0）
+    intLimit(value:any, name:string) {
+        if( Math.floor(value) >= 0){
+            return Math.floor(value)
+        }
+        else{
+            return false
+        }
+    },
+    //正数限制（含0）
+    floatLimit(value:any, name:string) {
+        if( Number(value) >= 0){
+            return Number(value)
+        }
+        else{
+            return false
+        }
+    },
+
+    //颜色混合
+    colourBlend (c1:string, c2:string, ratio:number) {
+        ratio = Math.max(Math.min(Number(ratio), 1), 0)
+        let r1:any = parseInt(c1.substring(1, 3), 16)
+        let g1:any = parseInt(c1.substring(3, 5), 16)
+        let b1:any = parseInt(c1.substring(5, 7), 16)
+        let r2:any = parseInt(c2.substring(1, 3), 16)
+        let g2:any = parseInt(c2.substring(3, 5), 16)
+        let b2:any = parseInt(c2.substring(5, 7), 16)
+        let r:any = Math.round(r1 * (1 - ratio) + r2 * ratio)
+        let g:any = Math.round(g1 * (1 - ratio) + g2 * ratio)
+        let b:any = Math.round(b1 * (1 - ratio) + b2 * ratio)
+        r = ('0' + (r || 0).toString(16)).slice(-2)
+        g = ('0' + (g || 0).toString(16)).slice(-2)
+        b = ('0' + (b || 0).toString(16)).slice(-2)
+        return '#' + r + g + b
     }
 }
 

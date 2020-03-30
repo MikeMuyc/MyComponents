@@ -2,11 +2,14 @@
     <div id="detail" >
         <div class="square">
             <mixSelect
+                    selIconName="icondaosanjiao"
+                    rowIconName="iconjiantou-copy"
                     :selectList="testJson"
-                    :labelName="`name`"
-                    :valueName="`val`"
-                    :childrenName="`children`"
+                    labelName="name"
+                    valueName="val"
+                    childrenName="children"
                     @sentTo="getVal"
+                    @sentItem="getItem"
             >
             </mixSelect>
             <p style="position: absolute;bottom: 10px;">可以无限级展开的菜单组件，因为是向右展开，请注意控制组件与浏览器右边界的距离</p>
@@ -66,8 +69,8 @@
               }
             -->
         </div>
-        <div class="square" style="width: 100%;height: auto;padding: 20px 0;">
-
+        <div class="square" style="width: 100%;height: auto;padding: 20px;">
+            全局修改主题色：<themePicker style="display: inline-flex"></themePicker>
         </div>
     </div>
 </template>
@@ -79,7 +82,7 @@
     import randomBall from '@/components/randomBall.vue'
     import myBtn from '@/components/myBtn.vue'
     import snowy from '@/components/snowy.vue'
-
+    import themePicker from "@/components/themePicker"
 
     @Component({
         components: {
@@ -87,6 +90,7 @@
             mixSelect,
             myBtn,
             snowy,
+            themePicker
         }
     })
 
@@ -113,6 +117,9 @@
         }
         getVal(val){
             console.log(val)
+        }
+        getItem(item){
+            console.log(item)
         }
         setball(val,index){
             let random:any = this.$refs.random;
