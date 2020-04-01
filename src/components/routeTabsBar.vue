@@ -1,13 +1,15 @@
 <template>
     <div id="routeTabsBar">
-        <router-link class="tabsItem" :class="{active:activeTabName === item.routeName}"
-             :to="{name:item.routeName,query:item.query}" v-for="item in tabList">
-            <em>{{item.showName}}</em>
+        <div class="tabsItem" :class="{active:activeTabName === item.routeName}" v-for="item in tabList">
+            <router-link :to="{name:item.routeName,query:item.query}" >
+                <em>{{item.showName}}</em>
+            </router-link>
             <i class="iconfont iconshanchu close" @click.stop="closeTabEvent(item.routeName)"></i>
             <div class="blueLine" v-show="activeTabName === item.routeName"></div>
-        </router-link>
+        </div>
 
-        <div class="more" v-show="partB.length > 0" v-clickoutside="closeMore" >
+
+        <div class="more" :style="moreStyle" v-show="partB.length > 0" v-clickoutside="closeMore" >
             <i class="iconfont icongengduo" @click="moreFlag = !moreFlag"></i>
             <div class="moreList" v-show="moreFlag" >
                 <div class="moreItem" v-for="(item,index) in partB" @click="moreClick(item,index)">
@@ -24,6 +26,12 @@
     const tabWidth = 140;
     const leftSideWidth = 170;
     export default {
+        props:{
+            zIndex:{
+                type:Number,
+                default:999,
+            }
+        },
         data() {
             return {
                 moreFlag:false,
@@ -41,6 +49,9 @@
             tabSize: function () {
                 return parseInt((document.body.offsetWidth - leftSideWidth) / tabWidth) - 1;
             },
+            moreStyle:function () {
+                return `z-index:${this.zIndex}`;
+            }
         },
         watch: {
             $route: function (to, from) {
@@ -63,7 +74,7 @@
                 "openTabs",
                 "clearAllTabs",
                 "setRouteModule",
-                "spliteTabList",
+
                 "setTabSize",
                 "closeTab",
                 "BToA"
@@ -102,25 +113,40 @@
         .tabsItem {
             display: inline-flex;
             width: 140px;
-            padding: 0 20px;
             height: 40px;
-            justify-content: center;
-            align-items: center;
             background-color: #efefef;
-            user-select: none;
             position: relative;
+            z-index: 1;
             border-right: 1px solid #cfd1d5;
-            color: #333;
-            &:hover {
-                background-color: #f8f8f8;
+
+            a{
+                width: 140px;
+                padding: 0 20px;
                 color: #333;
+                height: 40px;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                user-select: none;
+            }
+            &:hover {
+                a{
+                    background-color: #f8f8f8;
+                    color: #333;
+                }
+
             }
 
             &.active {
-                background-color: #fff;
-                height: 40px;
-                &:hover {
+                a{
                     background-color: #fff;
+                }
+
+                &:hover {
+                    a{
+                        background-color: #fff;
+                    }
+
                 }
             }
 
@@ -153,6 +179,7 @@
                 border-radius: 50%;
                 text-align: center;
                 color: #666666;
+                z-index: 44;
                 &:hover {
                     background-color: #dfdfdf;
                 }
@@ -164,7 +191,6 @@
             position: absolute;
             right: 0;
             top: 0;
-            z-index: 1;
             width: 40px;
             height: 40px;
             cursor: pointer;
