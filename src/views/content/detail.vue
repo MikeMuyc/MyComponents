@@ -82,7 +82,7 @@
     import randomBall from '@/components/randomBall.vue'
     import myBtn from '@/components/myBtn.vue'
     import snowy from '@/components/snowy.vue'
-    import themePicker from "@/components/themePicker"
+    import themePicker from "@/components/themePicker.vue"
 
     @Component({
         components: {
