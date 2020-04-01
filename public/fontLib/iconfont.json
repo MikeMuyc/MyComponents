@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "3979025",
+      "name": "勾",
+      "font_class": "gou1",
+      "unicode": "e773",
+      "unicode_decimal": 59251
+    },
+    {
+      "icon_id": "1249047",
+      "name": "勾",
+      "font_class": "gou",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "12871352",
+      "name": "箭头",
+      "font_class": "jiantou-copy",
+      "unicode": "ea4d",
+      "unicode_decimal": 59981
+    },
+    {
+      "icon_id": "7391805",
+      "name": "箭头",
+      "font_class": "jiantou",
+      "unicode": "ea4c",
+      "unicode_decimal": 59980
+    },
+    {
+      "icon_id": "7261746",
+      "name": "雪花",
+      "font_class": "xuehua",
+      "unicode": "e697",
+      "unicode_decimal": 59031
+    },
+    {
       "icon_id": "851713",
       "name": "删除 (3)",
       "font_class": "shanchu1",
@@ -20,25 +55,11 @@
       "unicode_decimal": 58917
     },
     {
-      "icon_id": "1249047",
-      "name": "勾",
-      "font_class": "gou",
-      "unicode": "e608",
-      "unicode_decimal": 58888
-    },
-    {
       "icon_id": "2003758",
       "name": "倒三角",
       "font_class": "daosanjiao",
       "unicode": "e60e",
       "unicode_decimal": 58894
-    },
-    {
-      "icon_id": "3979025",
-      "name": "勾",
-      "font_class": "gou1",
-      "unicode": "e773",
-      "unicode_decimal": 59251
     },
     {
       "icon_id": "5121526",
@@ -60,20 +81,6 @@
       "font_class": "jiang",
       "unicode": "e678",
       "unicode_decimal": 59000
-    },
-    {
-      "icon_id": "7261746",
-      "name": "雪花",
-      "font_class": "xuehua",
-      "unicode": "e697",
-      "unicode_decimal": 59031
-    },
-    {
-      "icon_id": "7391805",
-      "name": "箭头",
-      "font_class": "jiantou",
-      "unicode": "ea4c",
-      "unicode_decimal": 59980
     }
   ]
 }
