@@ -32,7 +32,7 @@
                     <p>滚动条组件</p>
                     <p>如果是用在body上作为全局滚动条，可以将isBodyScroll设置为true
                     <p style="position: absolute;bottom:10px">这里是底部</p>
-                    <p style="position: absolute;right:10px;top: 0;width: 20px;">这里是右边</p>
+                    <p style="position: absolute;right:10px;top: 0;width: 20px;">这里是右边123</p>
                 </div>
             </vue-perfect-scrollbar>
         </div>

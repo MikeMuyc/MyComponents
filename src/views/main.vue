@@ -13,13 +13,11 @@
 
                 <div class="right">
                     <i class="iconfont iconxiaoxi"></i>
-
                     <i class="iconfont icontongzhi" ></i>
                 </div>
             </div>
         </div>
         <vue-perfect-scrollbar :style="{height:bodyHeight + `px`}" ref="pfScroll" id="_scroll" :isBodyScroll="true">
-
             <transition name="el-fade-in-linear">
                 <router-view></router-view>
             </transition>
@@ -34,7 +32,6 @@
     export default class dataShow extends Vue {
         navlist:any = navlist;
         bodyHeight:number = document.body.clientHeight - 60 ;
-
 
         mounted(){
 
