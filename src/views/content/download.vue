@@ -92,18 +92,6 @@
         defense2: number = 490;
         defense3: number = 850;
 
-        mounted() {
-
-        }
-
-        download1() {
-            window.location.href = `http://111.0.124.231:9988/esayud/basic/download/file?id=5a9e76b706ce4fb4b20c43156d7949e9`
-        }
-
-        download2() {
-            window.location.href = `http://111.0.124.231:9988/esayud/basic/download/file?id=76ca5e53540b49a986548ede60e3fd9f`
-        }
-
         get monthActive() {
 
             return {
