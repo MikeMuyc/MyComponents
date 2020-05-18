@@ -10,7 +10,7 @@
             <div class="eqLine">
                 <div class="label">人物属性：</div>
                 <div class="text">
-                    72点；技巧属性 = 72 - 力量属性
+                    72点；破甲属性 = 72 - 伤害属性；战矛的破甲属性为【力量】
                 </div>
             </div>
             <div class="eqLine">
@@ -104,7 +104,9 @@
         defense2: number = 490;
         defense3: number = 850;
 
+        min:number = 0;
         get monthActive() {
+            this.calcData(3);
             return {
                 title: {
                     text: '基础伤害与破甲的伤害结算',
@@ -125,7 +127,7 @@
                 calculable: true,
                 grid: {
                     left: `24`,
-                    right: `36`,
+                    right: `54`,
                     top: '60',
                     bottom: '10',
                     containLabel: true
@@ -144,13 +146,13 @@
                     {
                         type: 'category',
                         data: this.xAxisData,
-                        name: '力量',
+                        name: '破甲属性',
 
                         boundaryGap: false,
                         nameLocation: 'end',
                         nameTextStyle: {
                             color: `#000`,
-                            padding: [25, 0, 0, -5],
+                            padding: [0, 0, 20, -20],
                         },
                         axisLabel: {
                             fontSize: 10,
@@ -181,7 +183,7 @@
                         axisTick: {
                             show: false
                         },
-                        min: 4000,
+                        min: this.min,
 
 
                         nameTextStyle: {
@@ -221,6 +223,7 @@
             };
         }
 
+
         calcData(type: number) {
             let defense: number = 0;                     //防御值
             let newArr: Array<any> = [];
@@ -232,12 +235,19 @@
                 defense = this.defense3;
             }
 
+            let min:number = 30000;
             for (let i = 0; i < this.xAxisData.length; i++) {
-                let res: number = ((this.damage + (72 - this.xAxisData[i]) * 6) * this.times + this.bonus) * (1 - defense / (this.sunder + this.xAxisData[i] * 6));
+                let res: any = ((Number(this.damage) + (72 - Number(this.xAxisData[i])) * 6) * Number(this.times) + Number(this.bonus)) * (1 - defense / (Number(this.sunder) + this.xAxisData[i] * 6));
 
                 newArr.push(
                     Number(res.toFixed(2))
                 )
+                if(Number(res.toFixed(2)) < min){
+                    min = Number(res.toFixed(2))
+                }
+            }
+            if (type == 3) {
+                this.min = Math.floor(min - 300);
             }
             return newArr
         }
@@ -249,7 +259,7 @@
 
 
             console.log(1 - defense / (this.sunder + liiang * 6), (this.damage + (72 - liiang) * 6) * 3.67 + 4765)
-
+            console.log(this.min)
         }
 
     }
