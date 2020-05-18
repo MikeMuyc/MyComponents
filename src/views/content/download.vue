@@ -1,6 +1,6 @@
 <template>
     <div id="simple">
-        <div style="position: absolute;left: 20px;top: 20px; width: 620px">
+        <div style="display: inline-block; width: 620px;max-width: 100%;margin-bottom: 30px">
             <div class="eqLine">
                 <div class="label">当前默认属性为：</div>
                 <div class="text">
@@ -61,14 +61,26 @@
                     最终伤害 = ((基础伤害 × 技能倍率) + 技能伤害加成) × (1 - 敌人护甲/伤害破甲)
                 </div>
             </div>
+            <div class="eqLine">
+                <div class="label">例如：</div>
+                <div class="text">
+                    独龙钻技能描述：367%的基础伤害 + 4765穿刺伤害。
+                </div>
+            </div>
+            <div class="eqLine">
+                <div class="label">最终伤害：</div>
+                <div class="text">
+                    ((1135 × 3.67) + 4765) × (1 - 敌人护甲/1567)
+                </div>
+            </div>
         </div>
-        <div style="position: absolute;right: 20px;top: 20px">
-            <v-chart
-                    :options="monthActive"
-                    :autoResize="true"
-                    style="width: 600px;height: 400px"
-            />
-        </div>
+
+        <v-chart
+                :options="monthActive"
+                :autoResize="true"
+                style="width: 600px;height: 400px;max-width: 100%"
+        />
+
     </div>
 </template>
 <script lang="ts">
@@ -93,7 +105,6 @@
         defense3: number = 850;
 
         get monthActive() {
-
             return {
                 title: {
                     text: '基础伤害与破甲的伤害结算',
@@ -110,7 +121,7 @@
                 tooltip: {
                     trigger: 'axis'
                 },
-                color: [`#00eaff`, `#0095ff`, `#febf6e`],
+                color: [`#40E137`, `#0095ff`, `#E139FF`],
                 calculable: true,
                 grid: {
                     left: `24`,
@@ -247,11 +258,12 @@
 <style lang="scss" scoped>
     #simple {
         width: 100%;
-        height: 100%;
+
         display: flex;
-        align-items: center;
-        justify-content: space-around;
         position: relative;
+        flex-wrap: wrap;
+        padding: 8vh 2vw;
+        justify-content: space-around;
 
         .back {
             position: absolute;
@@ -264,7 +276,7 @@
 
         .eqLine {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             margin-bottom: 15px;
 
 
