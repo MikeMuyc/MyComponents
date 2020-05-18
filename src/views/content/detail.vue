@@ -83,14 +83,15 @@
     import myBtn from '@/components/myBtn.vue'
     import snowy from '@/components/snowy.vue'
     import themePicker from "@/components/themePicker.vue"
-
+    import routeTabsBar from "@/components/routeTabsBar.vue"
     @Component({
         components: {
             randomBall,
             mixSelect,
             myBtn,
             snowy,
-            themePicker
+            themePicker,
+            routeTabsBar
         }
     })
 

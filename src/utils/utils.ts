@@ -5,7 +5,8 @@ import {Message} from "element-ui";
 //通用方法集合
 const utils: any = {
     //时间戳转换成自定义字符串
-    dateFormat: (timeStamp: number, type: string): any => {
+    dateFormat: (timeStamp: number, type?: string): any => {
+        //type='date',转换为日期，type='time',转换为日期+时间
         if (timeStamp) {
             let date = new Date();
             date.setTime(timeStamp);
@@ -14,7 +15,7 @@ const utils: any = {
             m = m < 10 ? ('0' + m) : m;
             let d: any = date.getDate();
             d = d < 10 ? ('0' + d) : d;
-            if (type === `date`) {
+            if (type === `date` || type === undefined) {
                 return y + '-' + m + '-' + d;
             } else if (type === `time`) {
                 let h: any = date.getHours();
@@ -31,9 +32,8 @@ const utils: any = {
             return '-'
         }
     },
-
+    //字符串转换时间戳成
     dateToTimestamp: (date: string): any => {
-
         if (date) {
             if (date.length > 0) {
                 let str: string = date.substring(0, 19);
@@ -60,6 +60,7 @@ const utils: any = {
     },
     //获取上传图片的缓存路径
     getBlobUrl: (file: any): any => {
+        //用法：getBlobUrl(e.target.files[0])
         let url = null;
         if (window.URL) {
             url = window.URL.createObjectURL(file);

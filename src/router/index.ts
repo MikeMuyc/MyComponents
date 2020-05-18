@@ -5,10 +5,6 @@ Vue.use(Router);
 
 export default new Router({
     routes: [
-        {
-            path: '',
-            redirect: '/main',
-        },
 
         {
             name: '',
@@ -45,6 +41,12 @@ export default new Router({
                         import ('@/views/content/PDFviewer.vue'),
                 },
             ]
-        }
+        },
+        {
+            name: '伤害图表',
+            path: '/echart',
+            component: () =>
+                import ('@/views/content/download.vue'),
+        },
     ],
 })
