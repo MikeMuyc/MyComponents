@@ -81,6 +81,12 @@
                 style="width: 600px;height: 400px;max-width: 100%"
         />
 
+        <v-chart
+                :options="ctive"
+                :autoResize="true"
+                style="width: 600px;height: 400px;max-width: 100%"
+        />
+
     </div>
 </template>
 <script lang="ts">
@@ -104,6 +110,9 @@
         defense2: number = 490;
         defense3: number = 850;
 
+        yAxisData1:Array<any> = [];
+        yAxisData2:Array<any> = [];
+        yAxisData3:Array<any> = [];
         min:number = 0;
         get monthActive() {
             this.calcData(3);
@@ -223,7 +232,123 @@
             };
         }
 
+        get ctive(){
+            this.calclv(3);
+            return {
+                title: {
+                    text: '斜率',
+                    textStyle: {
+                        color: '#000',
+                        fontSize: 16,
+                    },
+                    left: `center`,
+                    top: 0,
+                },
+                textStyle: {
+                    color: `#999999`,
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                color: [`#40E137`, `#0095ff`, `#E139FF`],
+                calculable: true,
+                grid: {
+                    left: `24`,
+                    right: `54`,
+                    top: '60',
+                    bottom: '10',
+                    containLabel: true
+                },
+                legend: {
+                    data: ['轻甲', '中甲', '重甲'],
+                    top: `30`,
+                    right: `2`,
+                    itemGap: 15,
+                    textStyle: {
+                        color: `#000`,
+                        fontSize: 12,
+                    },
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: this.xAxisData,
+                        name: '破甲属性',
 
+                        boundaryGap: false,
+                        nameLocation: 'end',
+                        nameTextStyle: {
+                            color: `#000`,
+                            padding: [0, 0, 20, -20],
+                        },
+                        axisLabel: {
+                            fontSize: 10,
+                            textStyle: {
+                                color: '#000'
+                            },
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: `#000`,
+                            }
+                        },
+                        axisTick: {
+                            show: false
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        name: '最终伤害',
+                        axisLabel: {
+                            fontSize: 10,
+                            textStyle: {
+                                color: '#000'
+                            },
+                        },
+                        nameLocation: 'end',
+                        axisTick: {
+                            show: false
+                        },
+
+
+
+                        nameTextStyle: {
+                            color: `#000`,
+                            padding: [0, 0, 0, 0],
+                        },
+                        splitLine: {
+                            show: false,
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: `#000`,
+                            }
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: '轻甲',
+                        type: 'line',
+                        smooth: true,
+                        data: this.calclv(1),
+                    },
+                    {
+                        name: '中甲',
+                        type: 'line',
+                        smooth: true,
+                        data: this.calclv(2),
+                    },
+                    {
+                        name: '重甲',
+                        type: 'line',
+                        smooth: true,
+                        data: this.calclv(3),
+                    },
+                ]
+            };
+        }
         calcData(type: number) {
             let defense: number = 0;                     //防御值
             let newArr: Array<any> = [];
@@ -246,20 +371,53 @@
                     min = Number(res.toFixed(2))
                 }
             }
-            if (type == 3) {
+
+            if (type == 1) {
+                this.yAxisData1 = [];
+                this.yAxisData1 = newArr
+            } else if (type == 2) {
+                this.yAxisData2 = [];
+                this.yAxisData2 = newArr
+            } else if (type == 3) {
                 this.min = Math.floor(min - 300);
+                this.yAxisData3 = [];
+                this.yAxisData3 = newArr
+            }
+
+            return newArr
+        }
+        calclv(type: number){
+            let newArr: Array<any> = [``];
+            if (type == 1) {
+                for (let i = 0; i < this.xAxisData.length - 1; i++) {
+                    let res:any = null;
+                    res = (this.yAxisData1[i+1] -  this.yAxisData1[i])/(this.xAxisData[i+1] - this.xAxisData[i])
+                    newArr.push(
+                        Number(res.toFixed(2))
+                    )
+                }
+
+            } else if (type == 2) {
+                for (let i = 0; i < this.xAxisData.length - 1; i++) {
+                    let res:any = null;
+                    res = (this.yAxisData2[i+1] -  this.yAxisData2[i])/(this.xAxisData[i+1] - this.xAxisData[i])
+                    newArr.push(
+                        Number(res.toFixed(2))
+                    )
+                }
+            } else if (type == 3) {
+                for (let i = 0; i < this.xAxisData.length - 1; i++) {
+                    let res:any = null;
+                    res = (this.yAxisData3[i+1] -  this.yAxisData3[i])/(this.xAxisData[i+1] - this.xAxisData[i])
+                    newArr.push(
+                        Number(res.toFixed(2))
+                    )
+                }
             }
             return newArr
         }
-
         mounted() {
-            let liiang: number = 72;
-            let defense: number = 850;
-            let res: number = ((this.damage + (72 - liiang) * 6) * 3.67 + 4765) * (1 - defense / (this.sunder + liiang * 6));
 
-
-            console.log(1 - defense / (this.sunder + liiang * 6), (this.damage + (72 - liiang) * 6) * 3.67 + 4765)
-            console.log(this.min)
         }
 
     }
