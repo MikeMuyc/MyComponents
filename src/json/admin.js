@@ -19,4 +19,9 @@ export default [
         path:'content',
         redirect:'组件',
     },
+    {
+        name:"图片拖动",
+        path:'modelSet',
+        redirect:'图片拖动',
+    },
 ]

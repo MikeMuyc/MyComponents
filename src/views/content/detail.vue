@@ -2,6 +2,7 @@
     <div id="detail" >
         <div class="square">
             <mixSelect
+                    v-model="selType"
                     selIconName="icondaosanjiao"
                     rowIconName="iconjiantou-copy"
                     :selectList="testJson"
@@ -10,6 +11,7 @@
                     childrenName="children"
                     @sentTo="getVal"
                     @sentItem="getItem"
+                    style="width: 240px"
             >
             </mixSelect>
             <p style="position: absolute;bottom: 10px;">可以无限级展开的菜单组件，因为是向右展开，请注意控制组件与浏览器右边界的距离</p>
@@ -70,7 +72,10 @@
             -->
         </div>
         <div class="square" style="width: 100%;height: auto;padding: 20px;">
-            全局修改主题色：<themePicker style="display: inline-flex"></themePicker>
+            <div class="themeColorSet">
+                全局修改主题色：<themePicker style="display: inline-flex"></themePicker>
+            </div>
+
         </div>
     </div>
 </template>
@@ -100,9 +105,9 @@
         //squareHeight:document.body.clientHeight - 100 + `px`,
         actIndex:number = 3;
         text:string = `xxxxx`;
-        txt:string = ``;
-        src:string = '';
 
+        src:string = '';
+        selType:string = ``;
         mounted(){
             //window.vue = this;
         }
@@ -141,7 +146,7 @@
 </script>
 
 <style scoped lang="scss">
-
+    @import "../../styles/mainVariables";
     #detail {
         width: 80%;
         min-width: 1180px;
@@ -156,7 +161,7 @@
             padding: 20px;
             border: 1px solid #ddd;
             position: relative;
-            overflow: hidden;
+            /*overflow: hidden;*/
             .btnLine{
                 margin-bottom: 20px;
                 overflow: hidden;
@@ -194,5 +199,8 @@
         }
     }
 
-
+    .themeColorSet{
+        display: flex;
+        align-items: center;
+    }
 </style>

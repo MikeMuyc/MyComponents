@@ -40,6 +40,12 @@ export default new Router({
                     component: () =>
                         import ('@/views/content/PDFviewer.vue'),
                 },
+                {
+                    path: 'modelSet',
+                    name: '图片拖动',
+                    component: () =>
+                        import ('@/views/content/modelSet.vue'),
+                },
             ]
         },
         {
@@ -47,6 +53,10 @@ export default new Router({
             path: '/echart',
             component: () =>
                 import ('@/views/content/download.vue'),
+        },
+        {
+            path: '/*',
+            redirect: '/main',
         },
     ],
 })

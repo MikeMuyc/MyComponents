@@ -118,8 +118,7 @@
 
 <style lang="scss" scoped>
     $white-color:#fff;
-    $theme-color:#495FF3;
-    $theme-color-active: #354ef2;
+    @import "../styles/mainVariables";
     .tSelect {
         z-index: 99;
         position: absolute;

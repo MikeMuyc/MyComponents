@@ -1,21 +1,31 @@
 <template>
-    <div class="mixSelect">
-        <div class="singleBOX" v-clickoutside="handleClose" :class="{active:showflag}">
-            <div class="valuebox" @click="showTs" :title="labelText">
-                <em :class="{active:labelText!== placeholder}">{{labelText}}</em>
+    <div class="singleBOX" v-clickoutside="handleClose" :class="{active:showflag}" >
+        <!---->
+        <div class="valuebox" :class="{disabled:disabled}" @click="showTs" :title="labelText" @mouseenter="mouseEnter" @mouseleave="clearShow = false">
+            <em v-if="checkedItem.length===0" :class="{active:labelText!== placeholder}">{{labelText}}</em>
+            <div class="curBox" v-for="item in checkedItem">
+                {{item[labelName]}}
             </div>
-            <div class="selIcon" @click="showTs" :class="{active:showflag}">
+
+            <div v-show="!disabled" class="selIcon" @click.stop="showTs" :class="{active:showflag}">
                 <slot name="selIcon">
-                    <i class="iconfont  svgse" :class="selIconName"></i>
+                    <i class="iconfont svgse" :class="selIconName"></i>
                 </slot>
             </div>
-            <transition name="slfade">
-                <tSelect v-if="showflag" :arr="selectList" :labelName="labelName" :valueName="valueName" :childrenName="childrenName" :busName="busEventName"  :maxViewItem="maxViewItem" :rowIconName="rowIconName">
-                    <slot name="rowIcon" slot="rowIcon"></slot>
-                </tSelect>
-                <!--组件递归调用实现无限级展开菜单，需要eventBus.js事件总线做参数中转，传递选中项的name和value。-->
-            </transition>
+            <div v-if="!disabled && clearable" class="clearIcon" v-show="clearShow" @click.stop="clearVal">
+                <slot name="selIcon">
+                    <i class="iconfont svgse" :class="clearIconName"></i>
+                </slot>
+            </div>
         </div>
+
+
+        <transition name="slfade">
+            <tSelect v-if="showflag" :arr="selectList" :labelName="labelName" :valueName="valueName" :childrenName="childrenName" :busName="busEventName"  :maxViewItem="maxViewItem" :rowIconName="rowIconName" :multiple="multiple" :checkedList="checkedItem">
+                <slot name="rowIcon" slot="rowIcon"></slot>
+            </tSelect>
+            <!--组件递归调用实现无限级展开菜单，需要eventBus.js事件总线做参数中转，传递选中项的name和value。-->
+        </transition>
     </div>
 </template>
 
@@ -72,7 +82,7 @@
             //视图内允许出现的最大项数
             maxViewItem:{
                 type:Number,
-                default:6,
+                default:5,
             },
 
             //类似于原生placeholder
@@ -90,7 +100,22 @@
                 type:String,
                 default:'iconjiantou1',
             },
-
+            disabled:{
+                type:Boolean,
+                default:false,
+            },
+            multiple:{
+                type:Boolean,
+                default:false,
+            },
+            clearable:{
+                type:Boolean,
+                default:true,
+            },
+            clearIconName:{
+                type:String,
+                default:'iconguanbi',
+            },
         },
         data() {
             return {
@@ -104,7 +129,9 @@
                 list:[],
                 //在事件总线中分配的名称
                 busEventName:`tsObj_`+ parseInt(Math.random()*100000),
-
+                //多选状态下的，选中列表
+                checkedItem:[],
+                clearShow:false,
             }
         },
         computed:{
@@ -126,24 +153,51 @@
             let _this = this;
 
             bus.$on(`${this.busEventName}`,function(data){
-                _this.labelText = data[_this.labelName];
-                _this.showflag = false;
-                _this.$emit(`sentTo`,`${data[_this.valueName]}`);
-                _this.$emit(`sentItem`,data);
 
+                if(_this.multiple){
+                    let isIndex = _this.checkedItem.findIndex(item => item === data);
+                    if(isIndex > -1){
+                        _this.checkedItem.splice(isIndex,1)
+                    }
+                    else{
+                        _this.checkedItem.push(data);
+                    }
+                    _this.$emit(`sentTo`,_this.checkedItem);
+                    _this.$emit(`sentItem`,_this.checkedItem);
+                }
+                else{
+                    _this.labelText = data[_this.labelName];
+                    _this.showflag = false;
+                    _this.$emit(`sentTo`,`${data[_this.valueName]}`);
+                    _this.$emit(`sentItem`,data);
+                }
             });
 
             bus.$on(`${this.busEventName}2`,function(item){
-                _this.labelText = item;
-                _this.$emit(`sentTo`,`${item}`);
-                _this.showflag = false;
+                if(_this.multiple){
+                    let isIndex = _this.checkedItem.findIndex(item1 => item1 === item);
+                    if(isIndex > -1){
+                        _this.checkedItem.splice(isIndex,1)
+                    }
+                    else{
+                        _this.checkedItem.push(item);
+                    }
+                    _this.$emit(`sentItem`,_this.checkedItem);
+                }
+                else{
+                    _this.labelText = item;
+                    _this.$emit(`sentTo`,`${item}`);
+                    _this.showflag = false;
+                }
             });
+
 
         },
         methods: {
             init(){
                 this.setSelectList();
                 this.setValue();
+
             },
             setValue(){
                 let val = this.value;
@@ -167,33 +221,53 @@
             },
             findLabel(arr, val) {
                 let vm = this;
+                let bool = true;
                 arr.forEach(item =>{
+
                     if(item[vm.valueName] !== null && item[vm.valueName] !== undefined){
                         if(item[vm.valueName] === val){
                             vm.labelText = item[vm.labelName];
-                            vm.placeFlag = false;
+
+                            bool = false;
                         }
                         else if(item[vm.childrenName]){
                             vm.findLabel(item[vm.childrenName],val)
                         }
-
                     }
                     else if(item[vm.childrenName]){
                         vm.findLabel(item[vm.childrenName],val)
                     }
                 })
 
+                this.placeFlag = bool&&val==='' ? bool : false;
+
             },
             handleClose(){
                 this.showflag = false;
             },
             showTs(){
-                if(this.selectList.length>0){
+                if(this.selectList.length>0 && !this.disabled){
                     this.showflag = !this.showflag
                 }
             },
+            clearVal(){
+                if(this.clearable){
+                    if(this.multiple){
+                        this.checkedItem = [];
+                        this.$emit(`sentTo`,this.checkedItem);
+                    }
+                    else{
+                        this.$emit(`sentTo`,'');
+                    }
+                }
+            },
+            mouseEnter(){
+                if(this.clearable && this.value !== ''){
+                    this.clearShow = true;
+                }
+            }
         },
-        destroyed(){
+        beforeDestroy(){
             bus.$off(`${this.busEventName}2`);
             bus.$off(`${this.busEventName}`);
         },
@@ -202,76 +276,115 @@
 
 <style lang="scss" scoped>
 
-    $theme-color:#495FF3;
-    $border-color:#5458e0;
+    @import "../styles/mainVariables";
     .singleBOX{
         background-color: #fff;
         width: 100%;
-        max-width: 160px;
-        height: 30px;
-        border: 1px solid #dddddd;
+        min-height: 36px;
+        border: 1px solid #dde4eb;
         position: relative;
-        padding: 0 30px 0 10px;
         display: inline-flex;
         align-items: center;
-        border-radius: 2px;
+        border-radius: 4px;
     }
     .valuebox{
         display: flex;
+        flex-wrap: wrap;
         width: 100%;
         height: 100%;
-        align-items: center;
+        padding: 5px 30px 0 10px;
         cursor: pointer;
         user-select: none;
         overflow: hidden;
-
         position: relative;
+        &.disabled{
+            background-color: #f8f9fc;
+            cursor: not-allowed;
+        }
+        >em{
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color:$third-font-color;
+            font-style: normal;
+            margin-bottom: 5px;
+            line-height: 24px;
+            height: 24px;
+            &.active{
+                color: #333;
+            }
+        }
+        .curBox{
+            padding: 0 4px;
+            height: 24px;
+            display: inline-flex;
+            background-color: #f4f6f9;
+            border-radius: 2px;
+            border: solid 1px #dde4eb;
+            margin: 0 5px 5px 0;
+        }
     }
     .singleBOX.active{
-        border-color: $border-color;
+        border-color: $theme-color;
+        /*box-shadow: 0px 0px 3px 0px*/
+        /*rgba(58, 126, 243, 0.6);*/
     }
-    .valuebox>em{
-        display: inline-block;
-        width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        color: #999;
-        font-style: normal;
-    }
-    .valuebox>em.active{
-        color: #333;
-    }
-    .selIcon{
+
+    .clearIcon{
         position: absolute;
         top: 0;
         right: 0;
+        z-index: 3;
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        height: 100%;
+        height: 34px;
         width: 30px;
         overflow: hidden;
         transition: all 0.3s;
         cursor: pointer;
+        background-color: #fff;
+        border-radius: 4px;
+    }
+    .clearIcon .svgse{
+        color: $third-font-color;
+    }
+
+    .selIcon{
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 2;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        height: 34px;
+        width: 30px;
+        overflow: hidden;
+        transition: all 0.3s;
+        cursor: pointer;
+        border-radius: 4px;
     }
     .selIcon.active{
         transform-origin: center center 0;
         transform: rotate(180deg);
     }
+
     .svgse{
         width: 12px;
-        height: 12px;
+
         font-size: 12px;
         line-height: 1;
         color: #999;
     }
     .selIcon.active .svgse{
-        color: $border-color;
+        color: $theme-color;
     }
     .singleBOX>.tSelect{
         transform-origin: center top 0;
-        top: 32px;
+        top: calc(100% + 10px);
         left: 0;
         min-width: 100%;
     }
