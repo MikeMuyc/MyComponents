@@ -117,7 +117,7 @@ const utils: any = {
             if (obj === '' || obj === null || obj === undefined) {
                 Message({
                     showClose: true,
-                    message: `请填写${objName}！`,
+                    message: `${objName}不能为空！`,
                     type: 'warning'
                 })
                 return false
@@ -137,24 +137,7 @@ const utils: any = {
         let reg = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/ || /^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$/
         return reg.test(id);
     },
-    //正整数限制（含0）
-    intLimit(value:any, name:string) {
-        if( Math.floor(value) >= 0){
-            return Math.floor(value)
-        }
-        else{
-            return false
-        }
-    },
-    //正数限制（含0）
-    floatLimit(value:any, name:string) {
-        if( Number(value) >= 0){
-            return Number(value)
-        }
-        else{
-            return false
-        }
-    },
+
 
     //颜色混合
     colourBlend (c1:string, c2:string, ratio:number) {

@@ -367,11 +367,7 @@
         }
 
         savaModel() {
-            if (this.bindObj) {
-                this.savaModelEdit()
-            } else {
-                this.savaModelAdd()
-            }
+
             this.tempObj = null;
         }
 

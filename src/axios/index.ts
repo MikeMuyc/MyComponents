@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import axios from 'axios'
+import axios, {AxiosRequestConfig, AxiosBasicCredentials} from 'axios'
 import router from '../router'
 import { Message } from 'element-ui';
 import qs from 'qs'
@@ -71,7 +71,7 @@ export default class myaxios{
             this.proUrl = pUrl;
         }
     }
-    post(url:string, data?:any) {
+    post(url:string, data?:any, auth?:AxiosBasicCredentials) {
         if (process.env.NODE_ENV === 'development') {
             //开发环境 do something
             axios.defaults.baseURL = this.baseURL;
@@ -84,6 +84,7 @@ export default class myaxios{
             data: data,
             timeout: timeout,
             withCredentials: true,
+            auth:auth,      //存放账号密码
             headers: {
 
             }
