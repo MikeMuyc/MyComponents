@@ -113,7 +113,7 @@ const utils: any = {
             return content(data, name);
         }
 
-        function content(obj, objName) {
+        function content(obj:any, objName:string) {
             if (obj === '' || obj === null || obj === undefined) {
                 Message({
                     showClose: true,

@@ -35,6 +35,7 @@
                     //防止用户连续点击生成多个计时事件
                 }
                 else{
+                    this.stopFlag = true;
                     let add = [];
                     //前端设置生成球的概率
                     for(let i=0;i<6;i++){
@@ -118,7 +119,7 @@
                                         clearInterval(ff2);
                                         clearInterval(this.fn1);
                                         this.fn1 = null;
-                                        this.stopFlag = true;
+
                                     }
                                 },timer)
                             }
