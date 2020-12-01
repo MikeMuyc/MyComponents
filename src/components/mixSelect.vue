@@ -258,6 +258,9 @@
                     }
                     else{
                         this.$emit(`sentTo`,'');
+                        setTimeout(()=>{
+                            this.setValue();
+                        },100)
                     }
                 }
             },
