@@ -5,15 +5,20 @@ const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const productionGzipExtensions = ['js', 'css', 'json'];
 const tsImportPluginFactory = require('ts-import-plugin');
+process.env.VUE_APP_TIME  = new Date().valueOf();
 
 function resolve(dir) {
     return path.join(__dirname, dir);
 }
 
 module.exports = {
-    lintOnSave: true,
+    //lintOnSave: true,
+    publicPath:`./`,
     transpileDependencies: [
+        'vue-echarts',
+        /iview.src.(?!utils.date\.js\b).+js$/,
         'resize-detector'
+
     ],
     css: {
         loaderOptions: {
@@ -24,7 +29,7 @@ module.exports = {
             }
         }
     },
-    publicPath:`./`,
+
     chainWebpack: config => {
         config.module.rule('scss').oneOfs.store.forEach(item => {
             item
@@ -86,11 +91,15 @@ module.exports = {
         },
 
         plugins: [
-            new webpack.ProvidePlugin({
-                $: "jquery",
-                jQuery: "jquery",
-                "windows.jQuery": "jquery"
+            new CompressionWebpackPlugin({
+                test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
+                threshold: 10240,
+                deleteOriginalAssets: false
             }),
+            new WebpackNotifierPlugin({alwaysNotify: true}),
+            // new BundleAnalyzerPlugin({
+            //     analyzerPort: 6543
+            // })
         ]
     },
 };

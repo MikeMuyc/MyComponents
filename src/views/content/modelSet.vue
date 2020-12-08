@@ -187,7 +187,6 @@
 <script lang="ts">
     import {Vue, Component, Prop, Model} from "vue-property-decorator";
     import {Modal, Button, Spin, Select, Option} from 'iview';
-    import mixSelect from '@/components/mixSelect.vue'
     import MImg from './modelImg';
     import myBtn from '@/components/myBtn.vue'
 
@@ -199,7 +198,6 @@
             Modal,
             Button,
             Spin,
-            mixSelect,
             Select,
             Option,
             myBtn

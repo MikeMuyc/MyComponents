@@ -1,6 +1,6 @@
 import ECharts from '@/components/ECharts.vue';
 import {Message} from "element-ui";
-
+import mixSelect from '@/components/mixSelect/mixSelect.vue';
 
 //通用方法集合
 const utils: any = {
@@ -165,6 +165,7 @@ export default {
 
         //echarts的vue组件
         Vue.component('v-chart', ECharts);
+        Vue.component('mixSelect', mixSelect);
 
         //将方法集添加到Vue实例上面去
         Vue.prototype.$utils = utils;

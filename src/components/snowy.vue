@@ -66,19 +66,19 @@
                         },this.tiemr);
                     },1000);
                 }
-
-
             },
+
             styleful(item){
                 let str = `left:${item.left}px;top:${item.top}px;opacity:${item.opacity};font-size:${item.fontSize}px;transform: rotate(${item.rotate}deg); transition:all ${item.transition}s linear;`;
                 return str;
             },
             cancelSnow(){
-                clearInterval(this.fn2);
-                clearInterval(this.fn1);
-                this.fn2 = null;
-                this.fn1 = null;
+
                 setTimeout(()=>{
+                    clearInterval(this.fn2);
+                    clearInterval(this.fn1);
+                    this.fn2 = null;
+                    this.fn1 = null;
                     this.iii = 0;
                     this.snowList = [];
                 },3000);

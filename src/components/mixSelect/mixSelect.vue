@@ -1,10 +1,12 @@
 <template>
     <div class="singleBOX" v-clickoutside="handleClose" :class="{active:showflag}" >
-        <!---->
+
         <div class="valuebox" :class="{disabled:disabled}" @click="showTs" :title="labelText" @mouseenter="mouseEnter" @mouseleave="clearShow = false">
             <em v-if="checkedItem.length===0" :class="{active:labelText!== placeholder}">{{labelText}}</em>
             <div class="curBox" v-for="item in checkedItem">
-                {{item[labelName]}}
+                <strong v-if="withParentName">{{resetLabelName(item)}}</strong>
+                <strong v-else="withParentName">{{item[labelName]}}</strong>
+                <i class="iconfont svgse" :class="clearIconName" @click.stop="deleteChecked(item)"></i>
             </div>
 
             <div v-show="!disabled" class="selIcon" @click.stop="showTs" :class="{active:showflag}">
@@ -13,7 +15,7 @@
                 </slot>
             </div>
             <div v-if="!disabled && clearable" class="clearIcon" v-show="clearShow" @click.stop="clearVal">
-                <slot name="selIcon">
+                <slot name="clearIcon">
                     <i class="iconfont svgse" :class="clearIconName"></i>
                 </slot>
             </div>
@@ -21,7 +23,19 @@
 
 
         <transition name="slfade">
-            <tSelect v-if="showflag" :arr="selectList" :labelName="labelName" :valueName="valueName" :childrenName="childrenName" :busName="busEventName"  :maxViewItem="maxViewItem" :rowIconName="rowIconName" :multiple="multiple" :checkedList="checkedItem">
+            <tSelect v-if="showflag"
+                     :arr="list"
+                     :labelName="labelName"
+                     :valueName="valueName"
+                     :childrenName="childrenName"
+                     :busName="busEventName"
+                     :maxViewItem="maxViewItem"
+                     :rowIconName="rowIconName"
+                     :multiple="multiple"
+                     :checkedList="checkedItem"
+                     :checkStrictly="checkStrictly"
+                     :value="value"
+            >
                 <slot name="rowIcon" slot="rowIcon"></slot>
             </tSelect>
             <!--组件递归调用实现无限级展开菜单，需要eventBus.js事件总线做参数中转，传递选中项的name和value。-->
@@ -94,12 +108,17 @@
             //iconfont箭头图标的名称
             selIconName:{
                 type:String,
-                default:'iconzhankai1',
+                default:'iconzhankai',
             },
             rowIconName:{
                 type:String,
-                default:'iconjiantou1',
+                default:'iconjiantou',
             },
+            clearIconName:{
+                type:String,
+                default:'iconguanbi',
+            },
+
             disabled:{
                 type:Boolean,
                 default:false,
@@ -108,13 +127,21 @@
                 type:Boolean,
                 default:false,
             },
+            //是否显示清除按钮
             clearable:{
                 type:Boolean,
                 default:true,
             },
-            clearIconName:{
-                type:String,
-                default:'iconguanbi',
+
+            //是否展示所有父节点名称
+            withParentName:{
+                type:Boolean,
+                default:false,
+            },
+            //是否可选任意节点。默认只能选最底层节点
+            checkStrictly:{
+                type:Boolean,
+                default:false,
             },
         },
         data() {
@@ -153,7 +180,6 @@
             let _this = this;
 
             bus.$on(`${this.busEventName}`,function(data){
-
                 if(_this.multiple){
                     let isIndex = _this.checkedItem.findIndex(item => item === data);
                     if(isIndex > -1){
@@ -166,38 +192,23 @@
                     _this.$emit(`sentItem`,_this.checkedItem);
                 }
                 else{
-                    _this.labelText = data[_this.labelName];
+                    /*if(_this.withParentName){
+                        _this.labelText = data.parentName ? `${data.parentName}/${data[_this.labelName]}` :  data[_this.labelName];
+                    }
+                    else{
+                        _this.labelText = data[_this.labelName];
+                    }*/
                     _this.showflag = false;
                     _this.$emit(`sentTo`,`${data[_this.valueName]}`);
                     _this.$emit(`sentItem`,data);
                 }
             });
 
-            bus.$on(`${this.busEventName}2`,function(item){
-                if(_this.multiple){
-                    let isIndex = _this.checkedItem.findIndex(item1 => item1 === item);
-                    if(isIndex > -1){
-                        _this.checkedItem.splice(isIndex,1)
-                    }
-                    else{
-                        _this.checkedItem.push(item);
-                    }
-                    _this.$emit(`sentItem`,_this.checkedItem);
-                }
-                else{
-                    _this.labelText = item;
-                    _this.$emit(`sentTo`,`${item}`);
-                    _this.showflag = false;
-                }
-            });
-
-
         },
         methods: {
             init(){
                 this.setSelectList();
                 this.setValue();
-
             },
             setValue(){
                 let val = this.value;
@@ -223,10 +234,14 @@
                 let vm = this;
                 let bool = true;
                 arr.forEach(item =>{
-
                     if(item[vm.valueName] !== null && item[vm.valueName] !== undefined){
                         if(item[vm.valueName] === val){
-                            vm.labelText = item[vm.labelName];
+                            if(vm.withParentName){
+                                vm.labelText = item.parentName ? `${item.parentName}/${item[vm.labelName]}` : item[vm.labelName];
+                            }
+                            else{
+                                vm.labelText = item[vm.labelName];
+                            }
 
                             bool = false;
                         }
@@ -268,23 +283,37 @@
                 if(this.clearable && this.value !== ''){
                     this.clearShow = true;
                 }
+            },
+            deleteChecked(item){
+                let index = this.checkedItem.findIndex(item1 => item1 === item)
+                this.checkedItem.splice(index,1);
+                this.$forceUpdate();
+            },
+            resetLabelName(item){
+                let str = '';
+                if(item.parentName){
+                    str = `${item.parentName}/${item[this.labelName]}`;
+                }
+                else{
+                    str = item[this.labelName]
+                }
+                return str
             }
         },
         beforeDestroy(){
-            bus.$off(`${this.busEventName}2`);
             bus.$off(`${this.busEventName}`);
         },
     }
 </script>
 
 <style lang="scss" scoped>
-
-    @import "../styles/mainVariables";
+    /*@import "./variables";*/
+    $boxHeight:32px;
     .singleBOX{
         background-color: #fff;
-        width: 100%;
-        min-height: 36px;
-        border: 1px solid #dde4eb;
+        width: 180px;
+        min-height: $boxHeight;
+        border: 1px solid $border-color;
         position: relative;
         display: inline-flex;
         align-items: center;
@@ -310,29 +339,40 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            color:$third-font-color;
+            color:#a8a8a8;
             font-style: normal;
             margin-bottom: 5px;
-            line-height: 24px;
-            height: 24px;
+            line-height: $boxHeight - 12px;
+            height: $boxHeight - 12px;
             &.active{
                 color: #333;
             }
         }
         .curBox{
             padding: 0 4px;
-            height: 24px;
+            height: $boxHeight - 10px;
             display: inline-flex;
             background-color: #f4f6f9;
             border-radius: 2px;
             border: solid 1px #dde4eb;
             margin: 0 5px 5px 0;
+            align-items: center;
+            max-width: 100%;
+            strong{
+                flex: 1;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                font-weight: normal;
+            }
+            .iconfont{
+                flex:none;
+                margin-left: 10px;
+            }
         }
     }
     .singleBOX.active{
         border-color: $theme-color;
-        /*box-shadow: 0px 0px 3px 0px*/
-        /*rgba(58, 126, 243, 0.6);*/
     }
 
     .clearIcon{
@@ -343,7 +383,7 @@
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        height: 34px;
+        height: $boxHeight - 2px;
         width: 30px;
         overflow: hidden;
         transition: all 0.3s;
@@ -363,7 +403,7 @@
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        height: 34px;
+        height: $boxHeight - 2px;
         width: 30px;
         overflow: hidden;
         transition: all 0.3s;
@@ -389,7 +429,7 @@
         transform-origin: center top 0;
         top: calc(100% + 10px);
         left: 0;
-        min-width: 100%;
+        //min-width: 100%;
     }
     /*过渡动画*/
     .slfade-enter-active,.slfade-leave-active {

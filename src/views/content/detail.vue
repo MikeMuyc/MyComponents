@@ -82,7 +82,7 @@
 
 <script lang="ts">
     import {Vue, Component, Watch} from "vue-property-decorator";
-    import mixSelect from '@/components/mixSelect.vue'
+
     import testJson from '@/json/testJson'
     import randomBall from '@/components/randomBall.vue'
     import myBtn from '@/components/myBtn.vue'
@@ -92,7 +92,6 @@
     @Component({
         components: {
             randomBall,
-            mixSelect,
             myBtn,
             snowy,
             themePicker,
