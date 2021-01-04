@@ -1,11 +1,11 @@
 <template>
-    <div class="singleBOX" v-clickoutside="handleClose" :class="{active:showflag}" >
+    <div class="singleBOX" v-clickoutside="handleClose" :class="{active:showflag,multiple:multiple}" >
 
-        <div class="valuebox" :class="{disabled:disabled}" @click="showTs" :title="labelText" @mouseenter="mouseEnter" @mouseleave="clearShow = false">
-            <em v-if="checkedItem.length===0" :class="{active:labelText!== placeholder}">{{labelText}}</em>
+        <div class="valuebox" :class="{disabled:disabled}" @click="showTs"  @mouseenter="mouseEnter" @mouseleave="clearShow = false">
+            <em v-if="checkedItem.length===0" :class="{active:labelText!== placeholder}" :title="labelText">{{labelText}}</em>
             <div class="curBox" v-for="item in checkedItem">
-                <strong v-if="withParentName">{{resetLabelName(item)}}</strong>
-                <strong v-else="withParentName">{{item[labelName]}}</strong>
+                <strong v-if="withParentName" :title="resetLabelName(item)">{{resetLabelName(item)}}</strong>
+                <strong v-else :title="item[labelName]">{{item[labelName]}}</strong>
                 <i class="iconfont svgse" :class="clearIconName" @click.stop="deleteChecked(item)"></i>
             </div>
 
@@ -108,15 +108,15 @@
             //iconfont箭头图标的名称
             selIconName:{
                 type:String,
-                default:'iconzhankai',
+                default:'icon-zhankai',
             },
             rowIconName:{
                 type:String,
-                default:'iconjiantou',
+                default:'icon-jiantou',
             },
             clearIconName:{
                 type:String,
-                default:'iconguanbi',
+                default:'icon-guanbi',
             },
 
             disabled:{
@@ -155,7 +155,7 @@
 
                 list:[],
                 //在事件总线中分配的名称
-                busEventName:`tsObj_`+ parseInt(Math.random()*100000),
+                busEventName:`tsObj_`+ new Date().valueOf() + (Math.random()*100).toFixed(2),
                 //多选状态下的，选中列表
                 checkedItem:[],
                 clearShow:false,
@@ -178,6 +178,15 @@
             this.init();
 
             let _this = this;
+            function setParent(arr,dataArr){
+                arr.forEach(item => {
+                    let index = dataArr.findIndex(item1 => item[_this.valueName] === item1);
+                    item.isParent = index > -1;
+                    if(item[_this.childrenName]){
+                        setParent(item[_this.childrenName],dataArr)
+                    }
+                })
+            }
 
             bus.$on(`${this.busEventName}`,function(data){
                 if(_this.multiple){
@@ -188,22 +197,22 @@
                     else{
                         _this.checkedItem.push(data);
                     }
+
+                    let parentIds = [];
+                    _this.checkedItem.forEach(item => parentIds = parentIds.concat(item.parentIds))
+                    setParent(_this.list,parentIds);
                     _this.$emit(`sentTo`,_this.checkedItem);
                     _this.$emit(`sentItem`,_this.checkedItem);
                 }
                 else{
-                    /*if(_this.withParentName){
-                        _this.labelText = data.parentName ? `${data.parentName}/${data[_this.labelName]}` :  data[_this.labelName];
-                    }
-                    else{
-                        _this.labelText = data[_this.labelName];
-                    }*/
+
+                    setParent(_this.list,data.parentIds);
                     _this.showflag = false;
-                    _this.$emit(`sentTo`,`${data[_this.valueName]}`);
+                    _this.$emit(`sentTo`,data[_this.valueName]);
                     _this.$emit(`sentItem`,data);
+
                 }
             });
-
         },
         methods: {
             init(){
@@ -212,15 +221,16 @@
             },
             setValue(){
                 let val = this.value;
-                if( val === null || val === undefined){
+
+                if( val === null || val === undefined || this.multiple){
                     this.labelText = this.placeholder;
                 }
-                else{
+                else {
                     //this.placeFlag = true;
+
                     this.findLabel(this.list,val);
                     this.setplace();
                 }
-
             },
             setSelectList(){
                 this.list = JSON.parse(JSON.stringify(this.selectList));
@@ -269,6 +279,7 @@
                 if(this.clearable){
                     if(this.multiple){
                         this.checkedItem = [];
+                        this.labelText = this.placeholder;;
                         this.$emit(`sentTo`,this.checkedItem);
                     }
                     else{
@@ -307,21 +318,27 @@
 </script>
 
 <style lang="scss" scoped>
-    /*@import "./variables";*/
+    @import "./variables.scss";
+    @import "./iconfont/iconfont.css";
     $boxHeight:32px;
     .singleBOX{
         background-color: #fff;
         width: 180px;
         min-height: $boxHeight;
+        height: $boxHeight;
         border: 1px solid $border-color;
         position: relative;
         display: inline-flex;
         align-items: center;
         border-radius: 4px;
+        &.multiple{
+            height: auto;
+        }
     }
     .valuebox{
         display: flex;
         flex-wrap: wrap;
+        align-items: center;
         width: 100%;
         height: 100%;
         padding: 5px 30px 0 10px;
@@ -334,7 +351,6 @@
             cursor: not-allowed;
         }
         >em{
-            display: inline-block;
             width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -342,15 +358,14 @@
             color:#a8a8a8;
             font-style: normal;
             margin-bottom: 5px;
-            line-height: $boxHeight - 12px;
-            height: $boxHeight - 12px;
+
             &.active{
                 color: #333;
             }
         }
         .curBox{
             padding: 0 4px;
-            height: $boxHeight - 10px;
+            height: calc(100% - 10px);
             display: inline-flex;
             background-color: #f4f6f9;
             border-radius: 2px;
@@ -372,7 +387,7 @@
         }
     }
     .singleBOX.active{
-        border-color: $theme-color;
+        border-color: #2064CF;
     }
 
     .clearIcon{
@@ -383,7 +398,7 @@
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        height: $boxHeight - 2px;
+        height: calc(100% - 2px);
         width: 30px;
         overflow: hidden;
         transition: all 0.3s;
@@ -403,7 +418,7 @@
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        height: $boxHeight - 2px;
+        height: 100%;
         width: 30px;
         overflow: hidden;
         transition: all 0.3s;
@@ -417,7 +432,6 @@
 
     .svgse{
         width: 12px;
-
         font-size: 12px;
         line-height: 1;
         color: #999;
@@ -430,6 +444,10 @@
         top: calc(100% + 10px);
         left: 0;
         //min-width: 100%;
+        min-width: 100%;
+        &.multiple{
+            min-width: auto;
+        }
     }
     /*过渡动画*/
     .slfade-enter-active,.slfade-leave-active {

@@ -26,58 +26,7 @@ $themes: (
 
 
 
-@mixin base-background() {
-    @each $theme-name, $theme in $themes {
-        [data-theme = '#{$theme-name}'] & {
-            background-color: map-get($map: $theme, $key: base-color);
 
-        }
-    }
-}
-@mixin base-background-active{
-    @each $theme-name, $theme in $themes {
-        [data-theme = '#{$theme-name}'] & {
-            background-color: map-get($map: $theme, $key: background-active);
-
-        }
-    }
-}
-
-@mixin base-border() {
-    @each $theme-name, $theme in $themes {
-        [data-theme = '#{$theme-name}'] & {
-            border-color: map-get($map: $theme, $key: border-color);
-        }
-    }
-}
-
-@mixin base-color() {
-    @each $theme-name, $theme in $themes {
-        [data-theme = '#{$theme-name}'] & {
-            color: map-get($map: $theme, $key: base-color);
-
-        }
-    }
-}
-@mixin border-color() {
-    @each $theme-name, $theme in $themes {
-        [data-theme = '#{$theme-name}'] & {
-            border-color: map-get($map: $theme, $key: base-color);
-        }
-    }
-}
-@mixin border-box() {
-    @each $theme-name, $theme in $themes {
-        [data-theme = '#{$theme-name}'] & {
-            border:1px solid map-get($map: $theme, $key: base-color);
-        }
-    }
-}
-
-
-
-$second-font-color: #595959;
-$third-font-color: #8C8C8C;
 
 
 $white-color: #fff;

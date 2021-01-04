@@ -1,16 +1,17 @@
 <template>
-    <div class="tSelect" ref="tSelect">
+    <div class="tSelect" :class="{multiple:multiple}" ref="tSelect">
         <vue-perfect-scrollbar ref="tScroll" :style="{height:theight}"
                                :settings="{wheelPropagation:false,minScrollbarLength:18}">
             <div class="tLine" :class="{hover:hoverIndex === index}" v-for="(item,index) in arr" :key="item[valueName]">
-                <div class="tLabel" :class="{checked:isChecked(item),active:value === item[valueName]}"
+                <div class="tLabel" :class="{checked:isChecked(item),active:value === item[valueName] || item.isParent}"
                      @mouseenter="mouseEnter(index,item)" @click="sentVal(item)">
-                    {{item[labelName] || item}}
-                    <i v-if="isChecked(item)" class="iconfont iconcheck"></i>
+                    <div class="radius-box" v-if="multiple">
+                        <i v-if="isChecked(item)" class="iconfont icon-gou1"></i>
+                    </div>
+                    {{item[labelName]}}
                 </div>
 
-                <div class="rowIcon" >
-
+                <div class="rowIcon">
                     <slot name="rowIcon" v-if="item[childrenName] && item[childrenName].length>0">
                         <i class="iconfont" :class="rowIconName"></i>
                     </slot>
@@ -31,6 +32,7 @@
                      :multiple="multiple"
                      :checkedList="checkedList"
                      :parentName="parentNameTo"
+                     :parentIds="parentIdTo"
                      :checkStrictly="checkStrictly"
             >
                 <slot name="rowIcon" slot="rowIcon"></slot>
@@ -46,7 +48,7 @@
     export default {
         name: "tSelect",
         props: {
-            value:{},
+            value: {},
             arr: {
                 required: true,
                 type: Array,
@@ -83,16 +85,24 @@
             },
             checkedList: {
                 type: Array,
-                default: [],
+                default: function () {
+                    return []
+                },
             },
             parentName: {
                 type: String,
                 default: '',
             },
+            parentIds: {
+                type: Array,
+                default: function () {
+                    return []
+                },
+            },
             //是否可选任意节点。默认只能选最底层节点
-            checkStrictly:{
-                type:Boolean,
-                default:false,
+            checkStrictly: {
+                type: Boolean,
+                default: false,
             },
         },
 
@@ -105,15 +115,22 @@
                 theight: '',
                 Titem: {},
                 Tindex: -1,
+                isParent: false,
             }
         },
-        computed:{
-            parentNameTo:function(){
-                if(this.parentName){
+        computed: {
+            parentNameTo: function () {
+                if (this.parentName) {
                     return `${this.parentName}/${this.Titem[this.labelName]}`
-                }
-                else{
+                } else {
                     return this.Titem[this.labelName]
+                }
+            },
+            parentIdTo: function () {
+                if (this.parentIds.length > 0) {
+                    return this.parentIds.concat(this.Titem[this.valueName])
+                } else {
+                    return [this.Titem[this.valueName]]
                 }
             }
 
@@ -125,9 +142,9 @@
                 } else {
                     this.theight = this.itemHeight * this.arr.length + `px`;
                 }
-                setTimeout(() => {
-                    this.leftVal = this.$refs.tSelect.clientWidth + 5 + `px`;
-                }, 100)
+                this.$nextTick(() => {
+                    this.leftVal = this.$refs.tSelect.clientWidth + 5 + `px`
+                });
                 this.hoverIndex = -1;
             },
             hoverIndex: function (val) {
@@ -135,8 +152,9 @@
             }
         },
         mounted() {
+
             if (this.arr.length > this.maxViewItem) {
-                this.theight = this.itemHeight * this.maxViewItem + `px`;
+                this.theight = this.itemHeight * this.maxViewItem + `px`
             }
             this.$nextTick(() => {
                 this.leftVal = this.$refs.tSelect.clientWidth + 5 + `px`
@@ -149,14 +167,14 @@
                 this.Tindex = index;
             },
             sentVal(item) {
-
                 if (item[this.valueName] !== undefined) {
                     item.parentName = this.parentName;
+                    item.parentIds = this.parentIds;
+
                     if (item[this.childrenName]) {
-                        if(this.checkStrictly){
+                        if (this.checkStrictly) {
                             bus.$emit(`${this.busName}`, item)
-                        }
-                        else if (item[this.childrenName].length === 0) {
+                        } else if (item[this.childrenName].length === 0) {
                             bus.$emit(`${this.busName}`, item)
                         }
                     } else {
@@ -164,7 +182,6 @@
                     }
                 }
             },
-
 
             isChecked(item) {
                 let isIndex = this.checkedList.findIndex(item1 => item1 === item);
@@ -175,7 +192,8 @@
 </script>
 
 <style lang="scss" scoped>
-    /*@import "./variables";*/
+    @import "./variables.scss";
+    @import "./iconfont/iconfont.css";
     $white-color: #fff;
     $boxHeight: 32px;
     .tSelect {
@@ -188,8 +206,10 @@
         border-radius: 4px;
         transform-origin: center top 0;
 
+
         .tLine {
             position: relative;
+
             .tLabel {
                 padding: 10px 30px 10px 10px;
                 height: $boxHeight;
@@ -200,21 +220,25 @@
                 white-space: nowrap;
 
                 &:active {
-                    background-color: $theme-color-active;
+                    background-color: $background-active;
                 }
 
-                &.checked,&.active {
+                &.checked, &.active {
                     color: $theme-color;
                 }
             }
+
             &:hover, &.hover {
                 .tLabel {
                     color: #fff;
-                    &.checked,&.active {
+
+                    &.checked, &.active {
                         color: #fff;;
                     }
+
                     background-color: $theme-color;
                 }
+
                 .rowIcon {
                     > .iconfont {
                         color: #fff;
@@ -263,13 +287,23 @@
 
     .iconcheck {
         color: $theme-color;
-        font-size: 14px;
-        margin-left: 4px;
+        font-size: 12px;
     }
-    .tLine.hover{
+
+    .tLine.hover {
         .iconcheck {
             color: #ffffff;
-
         }
+    }
+
+    .radius-box {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 1px solid $border-color;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
     }
 </style>

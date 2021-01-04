@@ -5,73 +5,10 @@ $default-theme: (
         background-active: #4d83d9,
 );
 
-$eyes-theme: (
-        base-color: #27C992,
-        border-color: #27C992,
-);
-
-$dark-theme: (
-        base-color: #263238,
-        border-color: #263238,
-);
-
-//定义映射集合
-$themes: (
-        default-theme: $default-theme,
-        eyes-theme: $eyes-theme,
-        dark-theme: $dark-theme,
-);
 
 
-
-@mixin base-background() {
-    @each $theme-name, $theme in $themes {
-        [data-theme = '#{$theme-name}'] & {
-            background-color: map-get($map: $theme, $key: base-color);
-
-        }
-    }
-}
-@mixin base-background-active{
-    @each $theme-name, $theme in $themes {
-        [data-theme = '#{$theme-name}'] & {
-            background-color: map-get($map: $theme, $key: background-active);
-
-        }
-    }
-}
-
-@mixin base-border() {
-    @each $theme-name, $theme in $themes {
-        [data-theme = '#{$theme-name}'] & {
-            border-color: map-get($map: $theme, $key: border-color);
-        }
-    }
-}
-
-@mixin base-color() {
-    @each $theme-name, $theme in $themes {
-        [data-theme = '#{$theme-name}'] & {
-            color: map-get($map: $theme, $key: base-color);
-
-        }
-    }
-}
-@mixin border-color() {
-    @each $theme-name, $theme in $themes {
-        [data-theme = '#{$theme-name}'] & {
-            border-color: map-get($map: $theme, $key: base-color);
-        }
-    }
-}
-@mixin border-box() {
-    @each $theme-name, $theme in $themes {
-        [data-theme = '#{$theme-name}'] & {
-            border:1px solid map-get($map: $theme, $key: base-color);
-        }
-    }
-}
-
+$theme-color:#2064CF;
+$background-active:#4d83d9;
 $success-color: #51AB44;
 $warning-color: #ED923A;
 $error-color: #F55955;
@@ -81,33 +18,4 @@ $second-font-color: #595959;
 $third-font-color: #8C8C8C;
 $tips-color:#BFBFBF;
 
-$white-color: #fff;
-$border-color: #d7dee3;                             //边框颜色
-$normal-border:solid 1px $border-color;             //通用边框样式
 
-$style-red:#e43879;                                 //主题桃红色
-$active-red:#E95F93;
-
-$style-green:#00c185;                               //主题色绿
-
-$third-font-color:#a0a5a9;
-$error-color:#ff2c2c;
-:root {
-    --colorful: #354ef2;  //--colorful  是变量名，css3有规则
-    --colorful-active: #0f2ef6;
-    --colorful-shadow: #DBDFFD;
-}
-$theme-color: var(--colorful);
-$theme-color-active: var(--colorful-active);
-$theme-color-shadow: var(--colorful-shadow);
-
-$red-theme-color: #e41e33; //主题颜色
-
-.centerFlex {
-    display: flex;
-    align-items: center;
-}
-
-.flex-1 {
-    flex: 1;
-}

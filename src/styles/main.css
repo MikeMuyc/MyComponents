@@ -1,0 +1,167 @@
+@charset "UTF-8";
+:root {
+  --colorful: #354ef2;
+  --colorful-active: #0f2ef6;
+  --colorful-shadow: #DBDFFD; }
+
+.centerFlex, .searchbox, .currentArea, .rowline, .rowline .right {
+  display: flex;
+  align-items: center; }
+
+.flex-1 {
+  flex: 1; }
+
+/*进入离开过渡动画*/
+.myfade-enter-active {
+  transition: opacity .2s; }
+
+.myfade-enter, .myfade-leave-to {
+  opacity: 0; }
+
+/**公用类样式**/
+input:focus, textarea:focus {
+  border-color: var(--colorful); }
+
+textarea {
+  border-radius: 2px; }
+
+.normalbtn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  min-width: 70px;
+  height: 30px;
+  margin: 0 10px;
+  background-color: #828db4;
+  border-radius: 2px;
+  color: #fff;
+  cursor: pointer;
+  user-select: none; }
+  .normalbtn.close {
+    background-color: #ecf2f8; }
+
+.Cardbody, .greenCard, .grayCard, .orangeCard, .redCard {
+  display: inline-flex;
+  padding: 0 10px;
+  height: 24px;
+  margin: 0 4px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none; }
+
+.greenCard {
+  color: #00c185;
+  border: 1px solid #00c185; }
+
+.grayCard {
+  color: #828db4;
+  border: 1px solid #828db4; }
+
+.orangeCard {
+  color: #ff7b2c;
+  border: 1px solid #ff7b2c; }
+
+.redCard {
+  color: #e43879;
+  border: 1px solid #e43879; }
+
+.mytag {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 56px;
+  height: 28px;
+  padding: 0 12px;
+  background-color: #ecf2f8;
+  color: #666;
+  border-radius: 14px;
+  margin: 0 20px 20px 0;
+  cursor: pointer;
+  user-select: none; }
+
+.mytag.active {
+  background-color: #e43879;
+  color: #fff; }
+
+.searchbox {
+  width: 225px;
+  font-size: 14px;
+  height: 30px;
+  background-color: rgba(130, 141, 180, 0.2);
+  border-radius: 15px;
+  position: relative; }
+  .searchbox .searchSvg {
+    position: absolute;
+    left: 10px;
+    top: 6px;
+    width: 18px;
+    height: 18px; }
+  .searchbox .searchInput {
+    position: absolute;
+    left: 32px;
+    top: 0;
+    border: 0 none;
+    height: 30px;
+    background-color: rgba(130, 141, 180, 0);
+    width: 168px;
+    color: #666; }
+
+.currentArea {
+  height: 32px;
+  border-radius: 2px;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0 8px;
+  margin: 0 6px; }
+  .currentArea.active {
+    background: var(--colorful);
+    color: #fff; }
+
+.contentBody {
+  width: 1180px;
+  margin: 20px auto 0; }
+
+.rowline {
+  margin-bottom: 30px; }
+  .rowline .label {
+    width: 120px;
+    padding-right: 30px;
+    position: relative; }
+    .rowline .label .note {
+      font-size: 15px;
+      color: red;
+      position: absolute;
+      left: -6px;
+      top: -2px; }
+  .rowline .right {
+    width: calc(100% - 120px);
+    flex-wrap: wrap; }
+    .rowline .right .searchbox input[type=text] {
+      width: 230px;
+      height: 32px;
+      border-radius: 2px 0px 0px 2px; }
+      .rowline .right .searchbox input[type=text]:focus {
+        border-color: var(--colorful);
+        border-right-color: #ccc; }
+    .rowline .right .searchbox button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #828db4;
+      border-radius: 0px 2px 2px 0px;
+      color: #fff;
+      height: 32px;
+      width: 50px;
+      cursor: pointer; }
+
+.rowInput {
+  height: 40px;
+  border-radius: 4px; }
+
+.rowInput:focus {
+  border-color: var(--colorful); }
+
+/*# sourceMappingURL=main.css.map */
